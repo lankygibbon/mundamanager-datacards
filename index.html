@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Necromunda Gang Cheat Sheet</title>
+<style>
+  :root {
+    --bg: #1a1a1a;
+    --surface: #252525;
+    --border: #444;
+    --text: #e8e8e8;
+    --muted: #888;
+    --accent: #c8a96e;
+    --leader: #e8c87a;
+    --champion: #9ab5d4;
+    --ganger: #a8c4a8;
+    --juve: #c4a8c4;
+    --crew: #c4b8a8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  /* ── Login ── */
+  #login-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+  }
+  .login-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 360px;
+  }
+  .login-box h1 {
+    font-size: 1.3rem;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+  }
+  .login-box p { color: var(--muted); margin-bottom: 1.5rem; font-size: 12px; }
+  .login-box label { display: block; margin-bottom: 0.3rem; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .login-box input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+    color: var(--text);
+    font-size: 13px;
+    margin-bottom: 1rem;
+    outline: none;
+  }
+  .login-box input:focus { border-color: var(--accent); }
+  .btn {
+    width: 100%;
+    background: var(--accent);
+    color: #1a1010;
+    border: none;
+    border-radius: 4px;
+    padding: 0.6rem 1rem;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .btn:hover { opacity: 0.9; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .error-msg { color: #e07070; font-size: 12px; margin-top: 0.75rem; }
+
+  /* ── Gang picker ── */
+  #gang-screen {
+    display: none;
+    padding: 2rem;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  #gang-screen h2 { color: var(--accent); margin-bottom: 1rem; }
+  .gang-list { display: flex; flex-direction: column; gap: 0.5rem; }
+  .gang-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: border-color 0.15s;
+  }
+  .gang-item:hover { border-color: var(--accent); }
+  .gang-item .gang-name { font-weight: 600; }
+  .gang-item .gang-meta { color: var(--muted); font-size: 11px; }
+  .gang-item .gang-rating { color: var(--accent); font-size: 12px; }
+  .back-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 4px;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    font-size: 12px;
+    margin-bottom: 1rem;
+  }
+  .back-btn:hover { border-color: var(--text); color: var(--text); }
+
+  /* ── Cheat sheet ── */
+  #sheet-screen { display: none; padding: 1rem; }
+
+  .sheet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .gang-title h1 { font-size: 1.4rem; color: var(--accent); }
+  .gang-title .gang-type { color: var(--muted); font-size: 12px; }
+  .gang-stats {
+    display: flex;
+    gap: 1.5rem;
+  }
+  .gang-stat { text-align: center; }
+  .gang-stat .val { font-size: 1.2rem; font-weight: 700; color: var(--accent); }
+  .gang-stat .lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+  .sheet-controls {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  /* ── Fighter cards ── */
+  .fighters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .fighter-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .fighter-card.dead { opacity: 0.4; }
+  .fighter-card.recovery { border-color: #8b6c20; }
+
+  .card-header {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+  .card-header.Leader    { background: #2a2510; border-bottom-color: #6a5a20; }
+  .card-header.Champion  { background: #101820; border-bottom-color: #2a4060; }
+  .card-header.Ganger    { background: #101810; border-bottom-color: #204020; }
+  .card-header.Juve      { background: #180f18; border-bottom-color: #3a2040; }
+  .card-header.Crew      { background: #1a1610; border-bottom-color: #403520; }
+
+  .fighter-name {
+    font-weight: 700;
+    font-size: 13px;
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .fighter-name.Leader   { color: var(--leader); }
+  .fighter-name.Champion { color: var(--champion); }
+  .fighter-name.Ganger   { color: var(--ganger); }
+  .fighter-name.Juve     { color: var(--juve); }
+  .fighter-name.Crew     { color: var(--crew); }
+
+  .fighter-type-label {
+    font-size: 10px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .credits-badge {
+    font-size: 10px;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  /* Stat row */
+  .stat-row {
+    display: flex;
+    border-bottom: 1px solid #2a2a2a;
+  }
+  .stat-cell {
+    flex: 1;
+    text-align: center;
+    padding: 3px 2px;
+    border-right: 1px solid #2a2a2a;
+  }
+  .stat-cell:last-child { border-right: none; }
+  .stat-cell .sv { font-size: 12px; font-weight: 600; }
+  .stat-cell .sk { font-size: 9px; color: var(--muted); text-transform: uppercase; display: block; }
+
+  /* XP / status row */
+  .status-row {
+    padding: 3px 0.75rem;
+    border-bottom: 1px solid #2a2a2a;
+    display: flex;
+    gap: 1rem;
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .status-row span.val { color: var(--text); }
+  .recovery-tag {
+    color: #c8a030;
+    font-weight: 600;
+  }
+
+  /* Equipment */
+  .section { padding: 0.4rem 0.75rem; }
+  .section-title {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
+
+  .weapon-block { margin-bottom: 0.4rem; }
+  .weapon-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .profile-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10px;
+  }
+  .profile-table th {
+    color: var(--muted);
+    font-weight: normal;
+    text-align: center;
+    padding: 1px 3px;
+    border-bottom: 1px solid #2a2a2a;
+  }
+  .profile-table td {
+    text-align: center;
+    padding: 1px 3px;
+    color: var(--text);
+  }
+  .profile-table .profile-name-cell {
+    text-align: left;
+    color: var(--muted);
+    font-style: italic;
+  }
+  .traits-cell {
+    text-align: left !important;
+    color: #9ab5d4;
+    font-size: 9px;
+  }
+
+  .wargear-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+  }
+  .wargear-tag {
+    background: #2a2a2a;
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+  }
+  .skill-tag {
+    background: #1e2a1e;
+    border: 1px solid #2a4a2a;
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 10px;
+    color: var(--ganger);
+  }
+
+  .special-rules-list {
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .rule-entry { margin-bottom: 0.3rem; line-height: 1.4; }
+  .rule-entry .rule-name { font-size: 10px; font-weight: 700; color: var(--accent); }
+  .rule-entry .rule-desc { font-size: 10px; color: #bbb; }
+
+  /* Loading spinner */
+  .loading {
+    text-align: center;
+    padding: 3rem;
+    color: var(--muted);
+  }
+
+  /* Print */
+  @media print {
+    body { background: white; color: black; font-size: 11px; }
+    #login-screen, #gang-screen { display: none !important; }
+    #sheet-screen { display: block !important; padding: 0; }
+    .sheet-controls { display: none; }
+    .fighter-card { border: 1px solid #ccc; break-inside: avoid; }
+    .card-header { background: #f0f0f0 !important; }
+    .fighter-name { color: black !important; }
+    .stat-cell .sv { color: black; }
+    .stat-row, .stat-cell, .section { border-color: #ddd; }
+    .profile-table th, .profile-table td { color: black; }
+    .traits-cell { color: #336; }
+    .skill-tag { border-color: #999; color: #336; background: #f0f8f0; }
+    .wargear-tag { background: #f0f0f0; color: #555; }
+    .gang-stat .val { color: #333; }
+    .gang-title h1 { color: #333; }
+    .section-title { color: #666; }
+    :root { --muted: #666; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Login -->
+<div id="login-screen">
+  <div class="login-box">
+    <h1>Necromunda Cheat Sheet</h1>
+    <p>Sign in with your MundaManager account</p>
+    <label>Email</label>
+    <input type="email" id="email" placeholder="you@example.com" />
+    <label>Password</label>
+    <input type="password" id="password" placeholder="••••••••" />
+    <button class="btn" id="login-btn" onclick="login()">Sign In</button>
+    <div class="error-msg" id="login-error"></div>
+  </div>
+</div>
+
+<!-- Gang picker -->
+<div id="gang-screen">
+  <button class="back-btn" onclick="logout()">← Sign out</button>
+  <h2>Your Gangs</h2>
+  <div class="gang-list" id="gang-list">
+    <div class="loading">Loading gangs…</div>
+  </div>
+</div>
+
+<!-- Cheat sheet -->
+<div id="sheet-screen">
+  <div class="sheet-header">
+    <div class="gang-title">
+      <h1 id="sheet-gang-name"></h1>
+      <div class="gang-type" id="sheet-gang-type"></div>
+    </div>
+    <div class="gang-stats" id="sheet-gang-stats"></div>
+    <div class="sheet-controls">
+      <button class="back-btn" onclick="showGangPicker()" style="margin:0">← Back</button>
+      <button class="back-btn" onclick="window.print()" style="margin:0">Print</button>
+    </div>
+  </div>
+  <div class="fighters-grid" id="fighters-grid">
+    <div class="loading">Loading…</div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://iojoritxhpijprgkjfre.supabase.co';
+const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlvam9yaXR4aHBpanByZ2tqZnJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjUxMDg0NzMsImV4cCI6MjA0MDY4NDQ3M30.6ZRhreN9fEwLN8vRBcd1uDgkyy_Cjm6U5wxeBNoYyKM';
+
+const RULES = {"Catfall":"When falling or jumping down, count the vertical distance as half. If not Seriously Injured or Out of Action, pass an Initiative test to stay Standing instead of Prone and Pinned.","Clamber":"This fighter climbs without halving their movement distance, as if using a ladder.","Dodge":"If wounded from an attack, roll a D6. On a 6, the attack is dodged. Against Blast/Flame weapons, a 6 allows the fighter to move up to 2\" before checking for hits.","Mighty Leap":"When leaping gaps, ignore the first 2\". Gaps of 2\" or less can be crossed without an Initiative test.","Spring Up":"If Prone and Pinned, pass an Initiative test to make a Stand Up action for free. If failed, standing up costs one action as usual.","Sprint":"If making two Move (Simple) actions in a round, the second Move doubles this fighter's Movement for that action.","Bull Charge":"When this fighter Charges, their Melee weapons gain Knockback and +1 Strength.","Bulging Biceps":"This fighter can wield an Unwieldy weapon with one hand, though it still occupies two weapon slots.","Crushing Blow":"Before rolling to hit in close combat, pick one dice (not associated to a Sidearm weapon) for a Crushing Blow. If it hits, the attack's Strength and Damage are increased by 1.","Headbutt":"If Standing and Engaged, this fighter may do a Headbutt (Free). Roll two D6. If either is equal to or higher than the enemy's Toughness, they suffer a hit at S+2 and D2. If both dice fail, this fighter suffers a hit using their own Strength and D1.","Hurl":"If Standing and Engaged, this fighter may Hurl (Basic) an enemy. The enemy makes an Initiative test. If failed, move the enemy D3\" in any direction. They become Prone and Pinned if Standing. If they collide with another fighter or terrain, they suffer a S3, D1 hit, and the target model becomes Prone and Pinned. This action is free if made instead of a free Fight action after a Charge.","Iron Jaw":"This fighter's Toughness is doubled against close combat attacks made with an AP of -.","Combat Master":"This fighter ignores penalties to hit rolls for interference and can always grant assists, regardless of the number of enemy fighters they are engaged with.","Counter-attack":"When making Reaction attacks, this fighter rolls an extra Attack dice for each of the attacker's failed hits.","Disarm":"This fighter's Melee weapons gain the Disarm trait. If a weapon already has this trait, it will disarm on a 5 or 6 instead of the usual 6.","Parry":"This fighter can parry attacks as though they had a Parry weapon. If they have one, they can parry one additional attack.","Rain of Blows":"This fighter treats the Fight action as Simple rather than Basic.","Step Aside":"If this fighter is hit in close combat, they can attempt an Initiative test to dodge a single attack. This skill can only be used once per enemy each round.","Backstab":"This fighter's Melee weapons gain the Backstab trait. If they already have it, add 2 to the attack's Strength instead of the usual 1 when used.","Escape Artist":"When making a Retreat action, add 2 to this fighter's Initiative test result (a natural 1 still fails). If Captured, they can add 1 to their escape roll if equipped with a skinblade.","Evade":"If this fighter is Standing and Active without cover, ranged attacks suffer -1 to hit, or -2 at Long range.","Infiltrate":"At the start of a battle, this fighter may be set aside. Before the first round, they may be set up anywhere on the battlefield, out of enemy fighters' line of sight and more than 6\" away.","Lie Low":"While Prone, this fighter cannot be targeted by ranged attacks unless the enemy fighter is within the attacking weapon's Short range.","Overwatch":"If this fighter is Standing and Active with a Ready marker, they can interrupt the action of an enemy they can see to make a Shoot action. If the enemy is pinned or injured, their activation ends.","Jink":"Once per round, when this crew's vehicle is hit, make a Jink save (D6) ignoring the weapon's AP. On a 6+, the hit is ignored.","Expert Driver":"Add 1 to the result of Loss of Control tests for this crew.","Heavy Foot":"Once per round, this vehicle may increase its Movement by D3\" for a Move or Ram action. On a 1, the vehicle's engine suffers a Glancing Hit.","Slalom":"Once per round, the crew's vehicle may make an additional turn of up to 45\u00b0 when performing a Move action.","T-bone":"When this vehicle has a Head-on Collision, add D3 to its Front Toughness until the collision is fully resolved.","Running Repairs":"If a natural 6 is rolled on a Handling test to Restart a Stationary and Stalled vehicle, restore 1 lost Hull Point.","Berserker":"When this fighter Charges, they get 1 extra Attack dice.","Fearsome":"An enemy fighter must pass a Willpower test to Charge this fighter. If they fail, they can't move, and their activation ends.","Impetuous":"When consolidating, this fighter may move up to 4\" instead of 2\".","Nerves of Steel":"When hit by a ranged attack, pass a Cool test to avoid being Prone and Pinned.","True Grit":"When rolling Injury dice for this fighter, roll one less. For Damage 1 attacks, roll two dice and discard one before resolving the other.","Unstoppable":"Before making a Recovery test, roll a D6. On a 4+, discard one Flesh Wound. If none, roll an extra dice for the Recovery test and discard one.","Commanding Presence":"When making a group activation, this fighter may include one additional fighter in the group. This skill cannot be used by vehicles.","Inspirational":"If a friendly model within 6\" fails a Cool test, make a Leadership test for this model. If passed, the Cool test is also considered passed.","Iron Will":"Subtract 1 from Bottle checks results while this model is on the battlefield and not Prone and Seriously Injured or Wrecked.","Mentor":"Each time another friendly model within 6\" gains XP, make a Leadership test for this model. If passed, the other model gains +1 XP.","Overseer":"If Standing and Active, this model can do the following action:       Order (Double): Make a Leadership test for this model. If passed, a friendly fighter within 6\" may immediately make 2 actions, without losing their Ready marker if they have one.","Regroup":"If Standing and Active or Mobile at the end of their activation, they can make a Leadership test. If passed, Broken friendly models within 6\" recover.","Ballistics Expert":"When making an Aim action, make an Intelligence test. If passed, they gain a +1 modifier to their hit roll.","Connected":"This model can make an additional Trade action during the post-battle sequence, even if they are already performing one. They cannot use this skill if unable to make post-battle actions.","Fixer":"In the post-battle Receive Rewards step, if this model is not Captured or In Recovery, their gang earns D3x10 credits. This model doesn't need to participate in the battle for this bonus.","Medicae":"Cannot be used by a vehicle. This fighter gains the Treat Wounds action:       Treat Wounds (Basic): Roll a D6. On 3+, a friendly fighter within 1\" either regains a lost Wound or loses a Flesh Wound.","Munitioneer":"Re-roll any fail ammo test for this model or another friendly one within 6\".","Savvy Trader":"When this model makes a Trade action post-battle, add 1 to the dice roll for Rare/Illegal item Availability. One item's cost is reduced by 20 credits, affecting only a single item, not a type.","Fast Shot":"This model treats the Shoot and Fire All actions as (Simple) rather than (Basic), provided they do not use an Unwieldy weapon.","Gunfighter":"When using the Twin Guns Blazing rule with 2 Sidearm weapons, this model does not suffer the -1 to hit and may target a different enemy with each weapon.","Hip Shooting":"Unwieldy weapons cannot be used with this skill.       Vehicle: treat the Move & Shoot action as Simple rather than Basic, provided it does not use an Unwieldy weapon.       Fighter: if standing and active, can do a Run and Gun (Double) action: move up to double their Movement and make an attack with a ranged weapon (with -1 to hit).","Marksman":"This model ignores Target Priority rules. Additionally, a 6 on a hit roll with a ranged weapon (without the Blast trait) scores a critical hit, doubling the weapon's Damage (for Rapid Fire (X) weapons, only the first hit's Damage is doubled).","Precision Shot":"When this model makes a ranged attack with a 6 on the hit roll (using a weapon without the Blast trait), no armour save can be made.","Trick Shot":"This model ignores the penalty for shooting at an engaged or partially covered target. If the target is in full cover, the hit roll penalty is reduced to -1 instead of -2.","Lord of the Rats":"Friendly Juves or Prospects within 12\" and with line of sight to this fighter gain +2 to Cool and Willpower checks. All rats ending movement within 3\" are pushed just far enough to be 3\" away.","Scavenger's Eye":"In scenarios with loot or scrap that converts to credits, add +1 to the roll for each item to determine its value. Example, D3x10 becomes (D3+1)x10","Blazing Faith":"This fighter ignores the action restrictions of the Blaze and Insanity conditions, though they still suffer damage from Blaze as normal.","Unshakable Conviction":"This fighter can make reaction attacks while Seriously Injured and cannot be Coup De Graced. May use Flock Together (Double) to move towards a friendly House Cawdor fighter by M+D3\".","Devotional Frenzy":"Once per round, this fighter may gain +D3 to WS, Cl, Ld, and Wil until their next activation. After activating, they suffer an automatic, unsavable Damage 1 hit.","Restless Faith":"During crew selection, this fighter may be taken out of Recovery to join the crew. If used, they start the battle with 1 Flesh Wound.","Faceless":"Until this fighter activates each round, enemies must pass a Willpower check to target them with ranged attacks or Blast markers. If failed, they must choose a different target.","Psi-touched":"May re-roll Willpower checks to activate or resist Wyrd Powers. When visiting the Black Market, may always purchase Ghast without an Availability roll.","Take Down":"When this fighter takes enemies Out of Action, set them aside. If this fighter's gang wins, roll a D6 for each enemy this fighter killed; on a 4+, they may automatically capture one (max 1 capture per battle).","Rumour-monger":"Can perform the Despicable Rumours post-battle action: pass an Intelligence check to reduce the opposing gang's Reputation by D3 and increase your own by the same amount.","Fake Out":"When determining the scenario, roll three D6 instead of two and discard one of your choice.","Doppelganger":"During Select Crews, the enemy leader must pass an Intelligence check. If failed, your gang may include one extra fighter in the starting crew.","Acrobatic":"While Active, this fighter may move over other fighters during Move or Charge actions and can cross barricades or terrain up to 2\" high without penalty. Must still follow the 1\" rule at end of movement.","Combat Focus":"Gain 1 token for each enemy that is Seriously Injured or Out of Action. Add +1 to Cool and Willpower checks per token (2 is always a failure).","Combat Virtuoso":"Chainswords, fighting knives, power knives/swords, and stiletto weapons gain the Versatile trait with Long range equal to this fighter's Strength.","Hit & Run":"After charging, this fighter may make a free Retreat action before reaction attacks. Even if the Retreat fails, the opponent only gets one chance to react.","Lightning Reflexes":"When Engaged, this fighter may attempt a free Retreat action before attacks are made. Can be used once per round. They remain Ready if they had a Ready marker.","Somersault":"Gain Somersault (Basic): place the fighter anywhere within 6\" they can see, following the 1\" rule. This doesn't count as movement. They may then Shoot with an Unwieldy weapon at -1 to hit.","Fists of Steel":"Unarmed attacks gain +2 Strength and deal 2 Damage.","Iron Man":"Flesh Wounds do not reduce this fighter's Toughness. However, if Flesh Wounds equal their Toughness, they go Out of Action as normal.","Immovable Stance":"Gain Tank (Double): until next activation, gain +2 to armour save (max 2+), cannot be moved, Pinned, or affected by skills or weapon traits that would move them.","Naaargah!":"May attempt a third action in a turn by rolling D6 \u2264 Toughness. On failure or a 6, activation ends. After using this skill, this fighter is always Pinned at end of activation.","Unleash the Beast":"Gain Flex (Simple): while Active and Engaged, all fighters in base contact must pass a Strength check or be pushed D3\" away.","Walk It Off":"If this fighter makes two or more Move (Simple) actions, they may take a Toughness check to recover 1 Wound or discard 1 Flesh Wound.","Big Brother":"While Standing and Active, friendly Gang Fighters within 9\" and with line of sight of this fighter may use this fighter's Cool for Nerve tests.","Bring it on!":"Gain Issue Challenge (Basic): target an enemy within 12\". Until end of round or until attacked, they must pass a Willpower check to target anyone else.","Guilder Contacts":"Bounty Hunters and Hive Scum cost D6\u00d710 credits less to hire (min 20 credits). Roll separately for each.","King Hit":"When making an unarmed attack, may roll 1 Attack dice instead of using their normal number of Attacks. If so, it gains Knockback, Shock, Pulverise, and Concussion traits.","Shotgun Savant":"When using any shotgun, may apply Short range bonus at Long range. With Scattershot, roll 2D6 and pick the highest for hits.","Steady Hands":"May make a free Reload (Simple) action before their first declared action each activation.","Cold & Calculating":"Once per round, this fighter may use their Intelligence instead of Cool or Willpower when making one such check.","Gadgeteer":"Before the battle, this fighter may modify one of their Plentiful weapons: either replace Plentiful with Knockback, Pulverise, Rending, or Shock, or increase Rapid Fire (X) by 1. Lasts for the battle.","Mental Mastery":"Cannot be made Insane. If targeted by a Wyrd Power while Standing or Pinned, may attempt to Disrupt it as if they were a Psyker.","Photonic Engineer":"Las weapons used by this fighter gain +1 Strength but become Unstable. May re-roll failed Ammo checks with las weapons unless they are Unstable.","Rad-phaged":"When hit by Gas or Toxin, the attacker rolls 2D6 and discards the highest instead of the normal D6. Moreover, when hit by Rad-phage, on a 4+ discard a Flesh Wound instead of gaining one. Always counts as Revealed in Pitch Black.","Weaponsmith":"All weapons this fighter has lose Scarce if they had it, or gain Plentiful if they didn't. No effect on weapons already Plentiful.","Got Your Six":"Once per round, if Standing and Active, this fighter may interrupt a visible enemy's Charge to Shoot at them. If the enemy is Pinned or Seriously Injured, their activation ends immediately.","Helmar's Justice":"When performing a Coup de Grace, roll twice on the Lasting Injury table and choose which result to apply.","Non-verbal Communication":"Gain Comms (Double): pick a friendly fighter within 6\". If they pass a Cool check, they gain 360\u00b0 vision until the End phase.","Restraint Protocols":"Gain Restrain (Simple): instead of a Coup de Grace, mark the enemy as restrained. In the Wrap-up, add +1 to capture rolls for each restrained enemy.","Team Work":"May make a group activation as a Champion. Champions may activate 2 fighters with this skill, Leaders 3.","Threat Response":"If an enemy ends a Charge within 6\", and this fighter is Standing, Active, and Ready, they may interrupt to Charge and Fight immediately. Then lose their Ready marker.","Avatar of Blood":"For each unsaved wound inflicted with a Melee weapon, this fighter may discard one previously suffered Flesh Wound.","Bloodlust":"After making a Coup de Grace, this fighter may Consolidate up to 2\" in any direction.","Crimson Haze":"This fighter automatically passes Nerve tests while Engaged with one or more enemy fighters.","Frenzy":"When making a Charge, this fighter gains +D3 Attacks but suffers -1 to hit rolls that turn.","Killing Blow":"Instead of normal close combat attacks, may make one attack (not with Sidearm) that, if it hits, doubles Strength and Damage and ignores armour saves.","Slaughterborn":"Each unsaved wound inflicted with a Melee weapon increases this fighter's Movement by 1\" for the rest of the battle.","Ghost of the Wastes":"With a sky mantle, Hide in the Wastes becomes a Basic action. In Underhive battles, may perform it as if in the Ash Wastes.","Stormwalker":"If this fighter starts their activation on the Battlefield Surface, gain +2 M.","Eyes of the Wasteland":"Visibility is 6\" greater for this fighter. In Pitch Black, can target Hidden models up to 9\" away.","Beast Handler":"While Mounted, increase Additional Attacks (X) of any equipped weapon by 1.","Ever Vigilant":"Makes +1 Reaction attack and does not suffer penalties for turning to face an opponent.","Bring it Down":"Gain Bring it Down (Basic): pick an enemy in line of sight. All friendly fighters may ignore Target Priority and re-roll to hit against them for the rest of the round.","Where There's Scrap, There's Creds!":"In the Receive Rewards step, gain D6\u00d710 credits for each enemy vehicle wrecked, even if this fighter didn't take part in the battle.","Nobody Pushes Kin Around":"Cannot be moved by weapon traits or skills. Automatically passes Initiative tests to avoid falling when near ledges.","Chemical Bonds Never Break":"This fighter may use a Chem twice before it is removed.","Dependable Like Kin":"Ignores the Unstable trait on their weapons and may re-roll failed Ammo checks.","Stubborn to the Last":"When taken Out of Action, may immediately make a Shoot (Basic) or Fight (Basic) action before being removed, even if not Ready.","There's Always Another Secret":"When opening a Loot casket, add an extra D6\u00d710 credits to the gang's Stash.","Iron Hard":"The first Serious Injury or Out of Action result this fighter suffers is treated as a Flesh Wound instead. If taken Out of Action, their crew automatically fails the next Bottle test.","Bullet Dodger":"Once per battle, force an enemy to re-roll all successful hits from a ranged attack against this fighter. On their next activation, they may only make Move (Simple) actions.","Badzone Legend":"This fighter has a 3+ save against damage from environmental hazards. On their next activation, they cannot start or join Group Activations.","Promethium-proof Killer":"This fighter is immune to the Blaze trait, but cannot benefit from the Leading by Example rule.","Slippery Scummer":"If captured, this fighter may choose another fighter from their gang to be captured instead. That fighter cannot be rescued.","Blade Breaker":"When hit by a Melee or Versatile weapon, roll a D6. On a natural 6, the hit is cancelled and the attacker is Disarmed as if hit by the Disarm trait.","Bigman":"May include fighters within 6\" in Group Activations instead of 3\". Reduces cover benefit by 1 (e.g., Full Cover gives -1 to hit instead of -2).","Lucky":"Once per battle, change any one die this fighter rolled to a 6. In battles with Reinforcements, their card must go in the Reinforcement deck.","Impressive Scars":"Friendly fighters with line of sight to this fighter always benefit from Leading by Example, regardless of distance. This fighter includes 1 fewer fighter in Group Activations.","Too Pretty for Primus":"If still on the battlefield at battle end, gain 2D6\u00d75 credits. On a double, the credits go to the opponent\u2019s Stash instead.","Iron Stare":"Enemy fighters must pass a Cool check to target this fighter with ranged attacks if this fighter has line of sight to them. Never counts as closest for Target Priority.","Rock Steady":"When this fighter is Standing, roll 2D6 for Bottle tests and use the lowest. If the gang bottles out, friendly fighters must re-roll successful Cool checks to stay.","One Punch":"When making an unarmed attack, may roll 1 Attack dice. If it hits, it's Strength 8, Damage 2, and cannot be saved against (except by Field armour).","Bullet Lord":"Once per battle, this fighter may count the Firepower dice roll as 3. The weapon automatically fails its Ammo check afterward.","Two-guns":"When using Twin Guns Blazing, enemy fighters within 6\" must take a Nerve test. Cannot make or join a Group Activation that round.","Chancer":"Gain D3 XP when hitting with an Improbable Shot. Must always gain skills randomly when spending XP on skill Advancements.","Headshot":"If this fighter takes an enemy Out of Action with their first Shoot (Basic) action of the battle, gain D3 XP.","One Shot":"Once per battle, may automatically hit with a ranged attack (not with Rapid Fire or Blast). Must take a Shoot (Basic) action if able. Still rolls Firepower dice.","Roadkill":"Once per battle, during this model's activation, enemy fighters only avoid being run over on a natural 6 when making Initiative tests.","Big Rig Boss":"If this Crew has a vehicle with Toughness 6+, they may automatically pass a Loss of Control test once per battle.","Cinderak City Drift":"Once per battle, this model may perform a Drift (Basic) action as a Free action during its activation.","Stunt Driver":"The first time this model Rolls due to failed Loss of Control, it loses 1 Hull Point instead of being Wrecked. It still moves randomly.","Wheels of Pain":"Any fighter ending their activation on this vehicle but not on a Transport area suffers a S3, AP\u2013, D1 hit that does not pin.","Duke of the Road":"Once per battle, after a Ram (Double), this vehicle may perform a Fire All (Basic) action as a Free action, targeting a vehicle hit by the Ram.","Masters Of Coin":"May perform the Negotiate Sale post-battle action:\n- **Negotiate Sale:** If the gang sells items during the Update Roster step, they gain full value for the first three items sold.","Hostile Negotiations":"May perform the Ransom Agreement post-battle action:\n- **Ransom Agreement:** Spend 2D6x10 credits to return a captive fighter. Half goes to the gang holding the captive. If the gang can't afford the ransom, nothing happens, but if they can, they must pay.","Inheritors of the Wastes":"May perform the Recruit Scion post-battle action:\n- **Recruit Scion:** If at least one fighter is deleted from the roster during Clean House, the gang may add a free Ironhead Squat Digger. Only one fighter may perform this action per battle.","New Frontiers":"May perform the Extract Creds post-battle action:\n- **Extract Creds:** Select one Territory; it provides no Boons except Income this cycle, but adds D6x10 credits to the gang's Stash. Each use must select a different Territory.","Explorators":"May perform the Automotive Tinkering post-battle action:\n- **Automotive Tinkering:** Gain 2D3x10 credits that must be spent on vehicle Wargear or Upgrades this cycle. Any unspent credits are lost.","Lords of the Spoil":"May perform the Spoil Treasure post-battle action:\n- **Spoil Treasure:** When performed, increase Availability by 3 when seeking Rare or Illegal items.","Bitter Enmity":"May perform the Recite Grievances post-battle action:\n- **Recite Grievances:** This fighter gains the Berserker skill for the duration of the next battle.","Skull Veterans":"May perform the Patch 'em Up post-battle action:\n- **Patch 'em Up:** The gang may purchase bionics from the Trading Post and all bionics are considered Common.","Battleborn Squats":"May perform the Battle Drill post-battle action:\n- **Battle Drill:** Any fighters hired during this post-battle sequence gain D3 XP when added to the gang roster.","Tinkerers":"May perform the Gunsmithing post-battle action:\n- **Gunsmithing:** Select one of this fighter's weapons. It permanently gains the Master-crafted trait.","Custom Rigs":"May perform the Monkey Wrench post-battle action:\n- **Monkey Wrench:** This fighter may perform the Negotiate Repairs post-battle action, reducing the cost by 2D6x10 credits (minimum 5).","Builders of the Underway":"May perform the Hidden Tunnels post-battle action:\n- **Hidden Tunnels:** Select D3 friendly fighters. They gain the Infiltrate skill for the duration of the next battle.","Spider Hunters":"May perform the Sump Safari post-battle action:\n- **Sump Safari:** Select a friendly fighter and make a Leadership test. If passed, they gain D3 XP; if failed, they go into Recovery.","Terrors of the Sump Sea":"May perform the Press Gang post-battle action:\n- **Press Gang:** Make a Leadership test for this fighter. If passed, in the gang's next battle, they may hire D3 Hive Scum for free.","Rules of Parley":"May perform the Law of the Sump post-battle action:\n- **Law of the Sump:** All gangs that took part in this battle add D6x10 credits to their Stash. Roll separately for each gang.","Denizens of the Deep":"May perform the Midnight Battlefield post-battle action:\n- **Midnight Battlefield:** During the next Underhive battle the gang fights in, the Pitch Black rules are automatically in effect.","Underearth Tunnellers":"May perform the Modified Techmite post-battle action:\n- **Modified Techmite:** Select an exotic beast this fighter is equipped with. For the duration of the next battle, the exotic beast may move freely through impassable terrain if it has sufficient movement to do so, but may not end its movement on or within impassable terrain.","Buried Treasures":"May perform the Overwork post-battle action:\n- **Overwork:** Select a Territory the gang controls. The gang gains all the Boons and Income from the Territory an additional time. However, for the next two campaign weeks, the Territory grants no Boons or Income and cannot be targeted by this post-battle action again while exhausted.","Lords of Ruin":"May perform the Hive Scavenging post-battle action:\n- **Hive Scavenging:** The gang gains 2D3x10 credits that may only be spent on Common Wargear and weapons from the Trading Post. Any unspent credits are lost at the end of the post-battle sequence.","Ancient Tech":"May perform the Archeobot post-battle action:\n- **Archeobot:** Select one of this fighter's exotic beasts. For the next battle, the beast's weapons gain +2 Strength and the Unstable trait.","Underhive Natives":"May perform the Dome Exploration post-battle action:\n- **Dome Exploration:** Make an Intelligence test for this fighter. If passed, add D6x10 credits to the gang's Stash. If failed, this fighter goes into Recovery.","Death from the Clouds":"May perform the Combat Drop post-battle action:\n- **Combat Drop:** During the next Ash Wastes battle, this fighter arrives as Reinforcements at the end of round one. This applies even if the scenario doesn't allow Reinforcements and is in addition to any Reinforcements granted by the scenario.","Far Horizons":"May perform the Scout Out post-battle action:\n- **Scout Out:** The next time the gang rolls to determine the scenario, their player may roll twice and choose which result to use.","Heroes of High Anchor":"May perform the Call for Aid post-battle action:\n- **Call for Aid:** In the gang's next battle, they may petition a House Agent at no credit cost.","Splinter Clan":"When a clan chooses the Splinter Mining Clan Ancestry, select one Ancestry ability from another clan that this fighter will be granted.","Survival Against the Odds":"May perform the Not Quite Dead post-battle action:\n- **Not Quite Dead:** Select a friendly fighter who suffered a Lasting Injury during this battle. You may discard the original result and roll again on the Lasting Injury table. The second result must be kept, even if it is worse.","Children of the Core":"May perform the Adapt or Die post-battle action:\n- **Adapt or Die:** Select one skill this fighter has. Replace it with any other skill from the same Skill Set or one of the fighter's Primary Skill Sets.","Existential Barrage":"(Simple). Target an enemy fighter within 1\". They must pass an Intelligence check or become Broken and flee immediately. After they moved, any of their allies within 5\" must also take a Nerve test or become Broken.","Terrible Truths":"(Basic). Target an enemy fighter within 3\". They must pass an Intelligence check or gain the Insane condition.","Psychotic Lure":"(Basic). Target a Ready enemy fighter within 3\". That fighter must activate next turn and cannot participate in a Group Activation.","Cyclopean Gaze":"(Double). Target a Ready enemy within 1\". They immediately lose their Ready marker.","Craven Howl":"(Basic), Continuous Effect. While maintained, Broken enemy fighters within 5\" cannot Rally.","Unrememberable Utterance":"(Simple), Continuous Effect. While maintained, enemy fighters activating within 3\" may only perform one action (no Double actions allowed).","Spatial Psychosis":"(Simple). Target a Standing, unengaged enemy fighter within 12\". They become Pinned. If less than \u00bd\" of a ledge, they may fall.","Seen Unseen":"(Basic), Continuous Effect. Target an enemy fighter within 3\". While maintained, they treat all fighters as enemies, and all treat the targeted fighter as an enemy. They lose benefits from rules affecting friendly fighters.","Ghost and Shadow":"(Basic). Target an enemy fighter within 10\". You may immediately change their facing.","Deceitful Thoughts":"(Double). Target an enemy fighter within 5\". If they fail an Intelligence check, you may move them up to their Movement characteristic in any direction (not into hazards or off ledges).","Suicidal Embrace":"(Basic). Target an enemy fighter within 3\". If they fail an Intelligence check, they make a single close combat attack against themselves (random melee weapon or unarmed attack if none, auto-hit, roll to wound and damage as normal).","Opprobrious Curse":"(Simple). Target an enemy fighter within 3\". If they fail a Toughness check, they suffer a Flesh Wound.","Cacophony of Silence":"(Double), Continuous Effect. While maintained, enemy fighters within 5\" have to re-roll any successful ranged Hit rolls.","Penumbral Mirror":"(Basic). Pick one enemy and one friendly fighter within 5\" of the Psyker. Move the friendly fighter to any location within 5\" of the enemy. They may be placed in base contact.","A Perfect Void":"(Basic), Continuous Effect. While maintained, the Psyker counts as being in full cover to enemies within 10\".","Eternal Slumber":"(Double). Seriously Injured enemies within 3\" of the Psyker immediately go OOA.","Cloak of Whispers":"(Basic), Continuous Effect. While maintained, the Psyker and friendly Delaque fighters within 3\" are immune to enemy gang tactics.","Sight Blight":"(Basic), Continuous Effect. While maintained, enemy fighters within 5\" are treated as affected by Pitch Black. This effect moves with the Psyker and does not create actual darkness.","Fast Healing":"If a Wyrd only has Biomancy powers: when the psyker makes a Recovery test, roll an extra Injury dice and discard one.","Arachnosis":"(Basic), Continuous Effect. While maintained, this fighter can use the Clamber, Catfall, and Mighty Leap skills.","Chameleon":"(Basic), Continuous Effect. While maintained, ranged attacks against this fighter suffer -2 to hit if the fighter did not move during their activation.","Cause Pain":"(Basic). Target an enemy within 18\" and line of sight who has lost a Wound or has a Flesh Wound. That fighter rolls an Injury dice and suffers the result immediately.","Stop Bleeding":"(Basic). Target a friendly fighter within 18\" and line of sight with at least one Flesh Wound. That fighter immediately removes all their Flesh Wounds.","Quickening":"(Basic), Continuous Effect. While maintained, increase this fighter's Movement by 3\" and improve WS, BS, and Initiative by 1 (max 2+).","Iron Arm":"(Basic), Continuous Effect. While maintained, this fighter gains a 5+ unmodifiable save against close combat attacks, made after any armour saves.","Flicker":"If a Wyrd only has Chronomancy powers: once per battle, the psyker can do one additional action during their activation.","Freeze Time":"(Double). All fighters within 12\" of this fighter may only perform one action during their activation for the rest of the round.","Suppress Power":"(Basic). Pick an enemy psyker within 18\" and line of sight. Choose one of their Wyrd Powers; it cannot be used this round.","Zen Shootist":"(Basic), Continuous Effect. While maintained, this fighter has BS 2+ and ignores cover modifiers, unless firing a weapon with Blast or Rapid Fire.","Walk Through Walls":"(Double). Place this fighter anywhere within 8\" of their location, not within 1\" of any enemy.","Mirror Image":"(Basic). Until the End phase, hit rolls against this fighter suffer -1 to hit. If they Retreat, they cannot be targeted by Reaction attacks.","Lucky Aura":"(Basic), Continuous Effect. While maintained, once per round this fighter may force an enemy to re-roll a successful WS or BS attack against them.","Future Sight":"If a Wyrd only has Divination powers: once per battle, this fighter may re-roll any dice roll (or one or more dice) during their activation, including enemy rolls.","Precognition":"(Special). During the Determine Scenario step, this fighter\u2019s gang may choose the scenario and becomes the attacker. Cancels out if both gangs have this power.","Foreboding":"(Double), Continuous Effect. While maintained, this fighter gains the Overwatch skill or grants it to one friendly fighter within 12\" and line of sight.","Misfortune":"(Basic). Once per round before the End phase, force an enemy within 12\" and line of sight to re-roll one dice roll.","Forewarning":"(Basic). Until the End phase, the first time this fighter is hit by an attack, roll a D6; on a 2+, the hit has no effect","Warp Whispers":"(Special). This fighter\u2019s gang increases Crew size by 1, may re-roll Reinforcement rolls, and raises the alarm automatically if the fighter ends their movement within 6\" of an enemy.","Visions":"(Double), Continuous Effect. While maintained, enemies within 18\" treat full cover as partial cover, and partial cover as no cover.","Fire Shield":"If a wyrd only has Pyromancy powers, they are immune to Blaze.","Body of Flame":"(Basic), Continuous Effect. While maintained, this fighter ignores hits from weapons with Blaze or Melta. Fighters ending their activation within 1\" must test as if hit by Blaze.","Stoke Flames":"(Basic). Target a visible enemy with Blaze within 18\"; place a 5\" Blast over them. All touched must test as if hit by Blaze.","Wall of Flame":"(Basic), Continuous Effect. Place a 5\" Blast within 12\" and LoS. While maintained, fighters starting or ending movement covered by the marker suffer a S3, D1, AP-1 Blaze hit.","Flame Blast":"(Basic), Continuous Effect. While maintained, one of this fighter's Melee or Versatile weapons gains the Blaze trait.","Molten Bolt":"(Basic). Target an enemy within 6\" and LoS. Make a BS test; if hit, resolve as S8, D3, AP-3 with Melta.","Scouring":"(Basic), Continuous Effect. While maintained, this fighter counts as having a Template weapon with S2, D1, AP-, and Blaze.","Techno-affinity":"If a wyrd only has Technomancy powers, they may re-roll any Ammo check they have to do.","Weapon Jinx":"(Simple). Pick an enemy within 18\". They must make an Ammo check for a weapon of your choice.","Overcharge":"(Basic), Continuous Effect. While maintained, one ranged weapon gains +2 Strength and +1 Damage, but becomes Unstable.","Hardening":"(Basic), Continuous Effect. While maintained, this fighter improves their save by 2 (to max 2+) or gains a 5+ save. Movement is reduced by 1 (min 1).","Manipulate Door":"(Simple). Open or close an unlocked door anywhere on the battlefield.","Manipulate Lumens":"(Double). Immediately apply or remove the Pitch Black rules.","Crack Lock":"(Basic). Unlock and open a door within 18\", or open a Loot casket anywhere and choose its contents.","Fists of Fury":"If a wyrd only has Telekinesis powers, their unarmed attacks gain +1 Strength and +1 Damage.","Assail":"(Basic). Target an enemy within 12\" and line of sight. On a hit (BS), move them D3\" and make them Pinned. If they hit a fighter or terrain, deal S3 D1 AP- to both.","Crush":"(Basic). Target an enemy or obstacle within 12\" and line of sight. On a hit (BS), destroy an obstacle or make the fighter roll a save, then apply an Injury roll if passed.","Force Field":"(Basic), Continuous Effect. While maintained, this fighter and friendly fighters within 3\" gain +1 save or a 6+ save if they had none.","Hailstorm":"(Basic). Make a BS hit roll against all fighters within 12\". Each hit deals S1, D1, AP-.","Force Blast":"(Basic). Push all enemies within 3\" by D3+1\". Falling fighters take an Initiative test or fall. If they hit terrain, they are Pinned and take damage equal to push distance.","Levitation":"(Basic), Continuous Effect. While maintained, Movement is increased by 3\". This fighter ignores all terrain and cannot fall but cannot move through walls or end on obstacles or bases.","Fearful Aura":"If a wyrd only has Telepathy powers, enemies charging this fighter must pass a Willpower check. On a fail, their action ends immediately.","Mind Control":"(Basic), Continuous Effect. Choose an enemy within 9\" and line of sight. They immediately make a Shoot (Basic) action, even if already activated, targeting an eligible friendly fighter of your choice.","Terrify":"(Double). Target an enemy within 18\" and line of sight. They must take a Nerve test at -3 or become Broken.","Invisibility":"(Double), Continuous Effect. While maintained, this fighter cannot be targeted by ranged attacks. The effect ends if they perform any action other than Move or Maintain Control.","Mental Assault":"(Basic). Target an enemy within 12\" and line of sight. Both the psyker and the target make a Willpower check. If the target fails or both pass, they are Pinned, lose their Ready marker, and the attack ends.","Hallucinations":"(Basic). Target an enemy within 12\". They immediately become Insane.","Unbreakable Will":"(Basic), Continuous Effect. While maintained, friendly fighters within 9\" may use this fighter\u2019s Cool or Willpower instead of their own when making Nerve or Willpower checks.","Warp Strength":"(Simple), Continuous Effect. While maintained, the psyker gains +2 Strength and +1 Damage to close combat attacks.","Dark Shield":"(Simple). Until the End phase, the psyker and friendly fighters within 3\" gain +1 to saves, or a 6+ save if they have none","Maddening Visions":"(Basic). Until the End phase, enemy fighters that end their activation within 3\" must pass a Willpower check or gain an Insanity marker.","Old Battle Wound":"At the end of each battle this fighter takes part in, roll a D6. On a 1, they go into Convalescence.","Hungering Pride":"This fighter must activate before any others in their crew. If multiple fighters have this mutation, you choose the order. The fighter also gains +1 XP for taking an enemy Leader or Champion Out of Action.","Dark Madness":"When activated, this fighter pass an Intelligence test. If failed, roll a D6 to determine their first action: 1-2 Move (Simple), 3-4 Shoot or Fight (Basic), 5-6 No action.","Bestial Senses":"This fighter cannot join or lead Group Activations. They always count as having a bio-scanner.","Disturbing Appendage":"This fighter counts as having a fighting knife that cannot be disarmed or removed. When using Unwieldy weapons, they suffer -1 to WS or BS rolls.","Warped Limbs":"When charging, roll 3D3 and choose the highest to determine movement distance.","Crooked Body":"Ranged attacks targeting this fighter suffer a -1 to hit at Long range. This fighter cannot wear armour; their armour can be returned to the Stash.","Twisted Flesh":"At activation, this fighter may remove one Flesh Wound. They cannot use bio-boosters, medicae kits, or recovery assistance from others.","Gang Leader":"Must be included in the gang. Cannot retire. If killed or removed, another fighter must be promoted to Leader.","Gang Hierarchy (Champion)":"If this fighter passes their Cool check after a Bottle test, all friendly fighters within 6\" automatically pass and do not flee. Can perform post-battle actions in Campaign play.","Gang Hierarchy (Leader)":"If this fighter passes their Cool check after a Bottle test, all friendly fighters within 12\" automatically pass and do not flee. Can perform post-battle actions in Campaign play.","Tools of the Trade":"May have multiple equipment sets.","Group Activation (X)":"Can activate up to X additional Ready friendly fighters within 3\". Fighters activate one at a time. Extra fighters cannot use Group Activation during this chain.","Psychoteric Whispers":"May be upgraded to gain Psychoteric Mastery and Non-sanctioned Psyker for +30 credits, or gain them later as Advancements.","Counter-charge":"If an enemy Charges this fighter\u2019s owner while the Sumpkroc is Standing and Active, it may immediately Charge that enemy before the attack is resolved. If it becomes Engaged, it may attack as normal. Can only use this once per round.","Scaly Hide":"Has a natural 5+ armour save.","Gang Fighter (X)":"The number of fighters with this rule must be equal to or higher than those without it in the gang (excluding Hangers-on and Hired Guns).","Promotion (X)":"If a fighter has 5+ Advancements at Downtime, they may be promoted to another type of Fighter. Their type changes for equipment and skills, and they lose their current Special Rules.\nThey gain: all special rules of the chosen promotion type. The model should reflect this change.","Vehicle Crew":"This fighter must always be equipped with a vehicle.","Born in the Saddle":"This fighter must always include their Mount on every fighter card. They are never without it.","Hot-headed":"If this fighter is Seriously Injured or OOA, friendly fighters within 3\" do not take Nerve tests \u2014 unless they also have this rule.","Fast Learner":"This fighter ignores the +2 XP penalty when improving a characteristic that has already been improved. Always pays the basic XP cost (until maxed out).","Pious":"If this fighter rolls a natural double 1 when making a Rally (Cool) check, they may re-roll it immediately.","Cranial Governors":"Ambots start in Safe Mode. At the start of any round, Safe Mode can be turned off (cannot be reactivated until Wrap-up). While off: gains Berserker (Ferocity) skill, Attacks = D3+1, and must split attacks between all base-contact fighters, including friendlies.","Excavation Automata":"If the gang controls Mine Workings, roll an additional D6 for Income in the post-battle sequence.","Valuable":"If an Ambot is captured and not rescued, the captor may either sell it to the Guilders or add it to their gang roster for free, if Reputation allows adding a Hanger-on.","Outlaw":"This fighter can only be hired by Outlaw gangs.","Agitator":"Before a battle, the gang may declare a boast. If they win, gain D3 Reputation; if they lose, lose 1 extra Reputation. Also allows rolling twice and choosing the result when testing for free fighters from Territories.","Training":"Between games, may train one Brute (not In Recovery). If Willpower check fails, Brute gains D3 XP. If passed, nothing happens. On the battlefield, if within 3\" of a friendly Brute, that Brute gains Nerves of Steel and can re-roll Leadership, Cool, Willpower, or Intelligence checks.","Part of the Crew":"Treated as a Ganger for crew selection. Cannot gain XP or Advancements. If they suffer a Lasting Injury that modifies their card, they are removed from the gang roster.","Patch Up":"Each Rogue Doc allows one extra Medical Escort post-battle action at no credit cost. A result of 6 = Stabilised (not Full Recovery). Multiple Rogue Docs allow multiple extra actions.","Seize the Prize":"During the Post-battle sequence, this fighter may perform the Claim Jump action. Roll a D6. On a 5+, choose a Territory controlled by your opponent and immediately gain its boons (this does not stop the owner from also gaining the boons).","Skills & Equipment":"A fighter with this rule has access to the Skills and Equipment available to them.","Palanite Specialist":"The number of Gangers and Crew in a Palanite Enforcers gang must always be equal to or greater than the number of other fighters (Leaders and Champions), excluding Hangers-on and Rookies.","*Petition":"A gang cannot directly hire a House Agent. Instead, the gang leader may petition for one during the pre-battle sequence. Roll D6 + Reputation:\n\n1\u20135: House Agent available for X credits\n6\u201310: House Agent available for X*2 credits\n11\u201315: Petition denied; no Agent available\n16+: Petition denied; gang fined 2D6\u00d710 credits\n\nA gang may either petition for a House Agent or roll on the House Favours table, not both.","Blessed by the Lost Saint":"If an enemy wishes to Fight or Shoot at the Prophet, they must pass a Willpower check. If they fail, the action ends with no effect. The Prophet also has a 3+ unmodifiable and unignorable save.","Beacon of Redemption":"Any friendly fighter with line of sight to the Prophet gains +2 to Cool and Willpower checks.","Articles of Faith":"If hired by a House Cawdor gang, this fighter generates Faith dice like a standard Cawdor fighter.","Combat Chems Stash":"When activated, this fighter may use Combat Chems to gain +D3 Attacks until the End phase. On a natural 1, they suffer a bad reaction and their Attacks is reduced to 1 instead for the round.","Bodyguard":"If their leader is hit by a ranged attack, a fighter with this rule within 2\" may take the hit and all its effects instead.","Indentured Fighters":"If their leader is removed from play, these fighters act as though the crew has failed a Bottle test, regardless of actual casualties.","Spyre Hunter":"This fighter is affected by the Reflex Enhancers, Master of the Hunt, Kill Count, and Spyrer Hunting Rig Glitches rules (see pages 28\u201329 of The Spyrer).","\"You Get What You Pay For\"":"Bounty Hunters are not included during the Choose Crew step. Instead, they may be added afterward, regardless of crew selection method. This may exceed the scenario\u2019s crew size limit.","Dead, Not Alive":"If an enemy fighter is killed and deleted from their roster, the gang that hired the Bounty Hunter earns half that fighter\u2019s value (rounded up to the nearest 5 credits) as a reward.","Claiming Bounties":"If the gang captures an enemy fighter and has a Bounty Hunter, roll a D6 in the post-battle sequence. On a 3+, receive D6\u00d710 credits as a reward.","\"We'll Get Our Bit\u2026\"":"If neither Dead, Not Alive nor Claiming Bounties were used, the Bounty Hunter stays for the next battle for free. If only one was used, roll a D6: on 4+, they stay for free; on 1\u20133, they leave. If both were used, they leave automatically. If a Bounty Hunter stays for free but is not used in the next battle, they leave. If taken Out of Action, they count as rolling 12\u201326 Out Cold on the Lasting Injuries table.","Rule of Iron":"When this fighter is activated, choose a visible friendly Orlock fighter within 6\" \u2013 that fighter gains Nerves of Steel until the end of the round if they do not already have it. In addition, subtract 2 from any Bottle test made while one or more friendly Arms Masters are on the battlefield.","Unique Partnership":"This Bounty Hunter may be hired alongside another Bounty Hunter, allowing a gang to field two Bounty Hunters instead of the usual one.","Slotted":"If Aramista Dae Catallus is wounded by a Fight (Basic) action from an enemy within Arbelesta Raen Catallus\u2019 vision arc and line of sight, and Arbelesta is not Prone, she may immediately make a Shoot (Basic) action targeting the attacker. She does not need to be Ready and does not lose her Ready marker.","Lobotomised":"This fighter does not become Prone and Pinned when hit by ranged attacks. However, they cannot perform the Take Cover (Basic) action.","Limited Learning Capacity":"This fighter can gain Advancements like a Ganger but cannot become a Specialist. If they roll a 2 or 12 on the Advancement \u2013 Ganger table, they may choose any other result from that table instead.","Slow-witted":"This fighter may never be activated as part of a Group Activation.","Runaway":"If this fighter is taken Captive and Sold to the Guilders, the selling gang earns an additional D6\u00d710 credits.","Loyal":"If a friendly fighter gains an Assist from this fighter during a close combat attack, they add +2 to hit rolls instead of the usual +1.","Xenos Abomination":"This fighter is not allowed to perform any post-battle actions.","Call the Storm":"While equipped with a stormcaller staff, this fighter can use the Change Weather (Double) action.","Change Weather (Double)":"If Visibility (X\") is not active, apply Visibility (24\"). If it is already active, increase or decrease X\" by 6\" (minimum 6\"). This effect lasts for the remainder of the battle and can be further modified by later uses.","Expert in their Field":"Each Van Saar Tek-hunter must choose a subtype when recruited: Augurtek, Bioteknist, Gunntek, or Teknomat. A gang may have up to two of each subtype. In an Underhells campaign, each subtype allows a specific post-battle action:<br />- Augurtek, Find Hidden Tech<br />- Bioteknist, Medical Treatment<br />- Gunntek, Fabricate Weapon<br />- Teknomat, Fabricate Wargear","Righteous Warrior":"Once per battle, when making a Threshold test for an Act of Faith, this fighter may re-roll all of the Faith dice rolled.","The Path We Follow":"When recruited, this fighter must choose a specific Path of Faith for their gang to follow.","Wastes' Most Wanted":"If Axon is captured or suffers a Memorable Death (66 on the Lasting Injury table), the gang responsible gains 200 credits during the End phase of the battle.","One of the Faithful":"If not Wrecked or Broken during the End phase, this model generates Faith normally but cannot be affected by Articles of Faith.","Devout Masses (Ganger)":"At the end of the Choose Crew step, one additional Ganger with this rule may be added to the starting crew, even if it exceeds the scenario limit.","Devout Masses (Juve)":"At the end of the Choose Crew step, D3 additional Juves with this rule may be added to the starting crew, even if it exceeds the scenario limit.","Fanatical":"If this fighter rolls a natural double 1 on a Cool check when making a Nerve test, they may immediately re-roll it.","Fanatical Fervour":"Once per battle, when charging, this fighter may double their Attacks. All Hit rolls made during that activation suffer a -1 modifier.","Poison Blood":"When using a weapon with the Toxin trait, this fighter may re-roll natural 1s when rolling against the target's Toughness.","Wasteland Ambushers":"In Ash Wastes battles, this fighter can be held in reserve and deployed at the start of any End phase (after the first), at least 9\" from enemies, with any Exotic Beasts.","Wasteland Snipers":"Ash Waste Nomads Warriors treat long rifles as Basic weapons instead of Special weapons.","From the Shadows":"Instead of deploying at the start of battle, this fighter may enter play at the start of any round (after the first), before Priority is rolled, in a position that is out of sight and at least 6\" from enemies.","Psychoteric Mastery":"This fighter is a Psyker and uses Psychoteric Whispers. Choose a discipline (Madness, Delusion, or Darkness) and one starting Wyrd Power. May learn more using XP like Primary Skills.","Sanctioned Psyker":"May re-roll one failed Willpower test per battle.","Non-sanctioned Psyker":"If taken Out of Action, enemy gains D3\u00d710 credits. If captured and sold, the fighter is worth their full value. Hired Guns with this rule can be sold immediately.","Cadaver Merchant":"When a non-Hired Gun, non-Hanger-on, non-Brute, or non-Exotic Beast gang member dies (via Memorable Death or unhealed Critical Injury), the gang may sell the body for D3\u00d710 credits. In an Uprising Campaign, the gang also gains an extra portion of Meat after battle.","Small Target":"Ranged attacks against them suffer -1 to hit. They cannot be chosen as potential targets for Stray Shots.","Burrowing":"May move through impassable terrain if they have enough movement but may not end their movement on or within it.","Scabber":"When selling Illegal equipment, the gang gains the item's value minus D3\u00d710 credits (minimum 5). If not in Recovery, the Scabber may make a Trade action during the post-battle sequence when visiting the Black Market.","High Calibre Hook-up":"While in the gang, all ammo types in the Trading Post or Black Market count as Common. Ammo with the Limited trait is treated as Scarce instead.","Watchdog":"If their owner is a sentry, they can spot attackers outside their vision arc. Add +1 to the D6 roll to spot (a natural 1 still fails).","Loyal Protector":"While Standing and Active or Engaged, and within 3\" of its owner, they prevent enemy fighters from making Coup De Grace actions against their owner.","Mobile Bulwark":"Friendly fighters in partial cover due to being obscured by a Sanctioner Automata count as being in full cover instead.","Devotion":"While standing, this fighter allows all friendly fighters within 9\" and LOS to use their Cool and Willpower for checks instead of their own.","Inured to Insanity":"This fighter can never be affected by the Insanity condition.","Witch":"This fighter is a Psyker. Chaos Cult Wyrd Powers are a Primary skill set for them.","Techno-baubles":"Reduce the Rare/Illegal value of any item in the Trading Post or Black Market by 2 (min 7+). If reduced below 7+, the item becomes Common.","Friends in the Trade":"Once per post-battle sequence, reduce the cost of one item in the Trading Post or Black Market by D3\u00d710 credits (minimum 20 credits).","Omen of Fortune":"While within 3\" of its owner, this Exotic Beast allows the fighter to avoid one successful hit per turn by passing a Willpower check after the hit roll. If passed, the attack misses; if failed, it hits as normal.","Warped Monstrosity":"Chaos Spawn cannot be Pinned, Broken, or made Insane. Flesh Wounds and Serious Injuries are ignored. If taken Out of Action, it does not suffer a Lasting Injury but must be restrained in the Wrap Up step.","Mindless Beast":"Chaos Spawn may only take Move, Charge, Fight, and Coup de Grace actions. Cannot use any weapons or equipment. Automatically passes Cool and Willpower checks, automatically fails Leadership and Intelligence checks.","Out of Control":"In the Wrap Up step, nominate up to 3 uninjured Helot Cultists. Roll a D6 for each: on 4+ the Spawn is restrained; if none succeed, it is removed from the gang. Any roll of 1 causes that Cultist to suffer a Lasting Injury.","Psychic Manifestation":"If the owner is a Psyker, they may re-roll one failed Willpower check per round when attempting a Wyrd Power (X) action.","A Leader Apart":"A Secundan Incursion gang must take a fighter with this rule as their Leader. They do not benefit from Gang Hierarchy (X) and can never be part of Group Activations.","Secundan Incursion Gang Leader":"This fighter may not retire. If they are removed from play: in an Underhells Campaign, the Malstrain player wins; otherwise, follow Death of a Leader rules, using the base gang\u2019s leader type.","Hard to Kill":"When rolling on the Lasting Injury table for this fighter, roll twice and choose the preferred result.","Useful Lies":"Once per pre- or post-battle sequence, a gang with a Whisper Merchant may count a single D6 roll as a 6 for: Determine Scenario, Choose Crews (random), Receive Rewards (including Territories), or Seek Rare/Illegal items. Track each use. After six uses, the gang must pay the hiring fee again or lose the Whisper Merchant.","Hexagrammatic Dampers":"If this fighter suffers a Perils of the Warp, do not roll on the Perils table. Instead, they are automatically taken Out of Action with result 15\u201326 (Out Cold) on the Lasting Injury table.","Intelligent Control":"Re-roll immediately failed Leadership, Cool, Willpower, or Intelligence check.","Move and Shoot":"This fighter may fire Unwieldy weapons as a Basic action instead of a Double action, but suffers an additional -1 to hit modifier.","My Little Friends":"Enemy fighters ending their activation in base contact with Rattus suffer D6 S1, AP\u2013, D1 hits. At the start of each activation, Rattus must pass a Willpower check or become Insane until his next activation.","Bad Smell":"Rattus can only be hired by House Cawdor gangs and follows the 'You Get What You Pay For' rule.","Questionable Morals":"Rattus may be hired by both Law Abiding and Outlaw gangs.","The Finest Merchandise":"An Underhive Trader may make the Trade action during the post-battle sequence as if they were a Leader.","Specialist Product":"When hiring an Underhive Trader, choose one of the following types: Relicmonger, Beastwrangler, Gun-smyth, Connected Trader.","Relicmonger":"Once per battle, when a fighter with blessed tokens is Seriously Injured or taken Out of Action, roll a D6. On a 6, they ignore the result.","Beastwrangler":"At the start of each campaign week, each Exotic Beast in the gang gains 1 XP.","Gun-smyth":"Once per post-battle sequence, may upgrade one ranged weapon purchased from the Trading Post or Black Market to have the Master-crafted trait for free.","Connected Trader":"Once per post-battle sequence, may double the credits gained from selling one item. May freely trade credits and items with other gangs in the same campaign if both agree.","Automated Repair Systems":"**Sanctioner Automata:** Do not roll for Recovery if this fighter is Seriously Injured \u2013 it automatically recovers as if a Flesh Wound was rolled.\n\n**Czarn:** As a post-battle action, Czarn may attempt to repair himself. Roll a D6, on a 3+, all Lasting Injuries are removed.","Tech Bypass":"May perform the Bypass Loot Casket (Basic) action. When rolling to determine contents, may re-roll the result.","Mono-arm":"May only be equipped with one weapon.","Paragon of the Ancestors":"This fighter can do an additional post-battle action, which must be an Ancestor ability.","Aberrants can appear in any generation":"Early or Late generation has no effect on an Aberrant profile or mutations.","Early Generation Hybrid":"An early generation hybrid has a third arm.","Extra Arm":"A fighter with a third arm may shoot Unwieldy weapons as a Basic action. Otherwise, they gain +1 Attack as an unarmed attack with the Rending trait. They may carry a fourth weapon and attack with up to three Sidearm and/or Melee weapons.","Later Generation Hybrid":"This fighter is from a later generation hybrid. This doesn't grant any extra abilities.","Van Saar Protective Gear":"Van Saar fighters are immune to the additional Flesh Wound caused by the Rad-phage weapon trait.","Superior Weapons Array":"This fighter may make two Shoot (Simple) actions per turn instead of a one Shoot (Basic) action. Each shot may use a different weapon and target a different fighter, following Target Priority rules.","Master of Cyberteknika":"**Van Saar Archeotek:** Pays half cost for Cyberteknika (rounded up to the nearest 5 credits) and may select one Alpha-level item for free when added to the gang, this does not increase the value of the fighter.\n\n**Von Buren (Rogue Archeotek):** When hired, may select up to three Cyberteknika items worth a total of 200 credits for free. These do not increase his value.","Sniping":"When making a Shoot action with a Basic weapon after taking the Aim action, this fighter may re-roll natural 1s to hit.","Sneaking":"Shooting attacks that target this fighter while they are in cover suffer an additional -1 to hit penalty.","Slopping":"At the end of the Set up the Battlefield step, roll a D6 for each In Recovery fighter with this rule. On a 6, clear their In Recovery status and make them available for this battle. If the gang also has a Slopper, Ratling Venators may roll once for this rule and once for the Slopper.","Scout Ahead":"When a fighter from a gang with a Dome Runner opens a Loot casket, they may re-roll the contents result, but must keep the second roll.","Guard Exosuit":"If the scenario uses sentries, this fighter may always be deployed as an additional sentry, even if this exceeds the maximum crew size.","Sensor Suite":"This fighter treats the Visibility (X) rule as being 3\" higher than normal.","Homing Teleport":"Each time this fighter makes a ranged attack with their power spear, roll a D6. On a 1-2, the homing teleport runs out of charge. Once depleted, the power spear cannot be used again this battle. On 3+, nothing happens.","Watch-skulls":"This fighter has a 360\u00b0 vision arc.","Experienced Hunter":"Choose one weapon or wargear this fighter has and increase its Augmentation level by 1.","Sthenian Hunting Rig":"Grants the Reflex Enhancers and Master of the Hunt special rules, a 4+ armour save, and a 5+ field armour save.","Sibling Rivalry":"If this fighter begins their activation within 9\" of another Spyre Hunter, all of their weapons gain the Reckless trait for that activation.","The Lord Helmawr":"A gang may not include both versions of Lady Haera at the same time.","Fear Inducing":"This fighter has the Fearsome (Ferocity) skill and may give it to their owner if within 3\" of them.","Fearsome (Ferocity)":"Enemies attempting to Charge this fighter must pass a Willpower check or their activation ends with no movement.","Horrific":"This fighter cannot be Captured.","House Ko'iron Ministorum Delegation Hierarchy (Leader)":"If this fighter passes a Bottle test, friendly House Ko'iron Ministorum Delegation fighters within 12\" that have not already tested automatically pass their Bottle test this round.","Inspirational Leader":"While this fighter is Standing, friendly fighters within 6\" and with line of sight may use this fighter's Cool and Willpower for their own checks.","Toll Collectors Hierarchy (Champion)":"If this fighter passes a Bottle test, friendly Toll Collectors fighters within 12\" that have not already tested automatically pass their Bottle test this round.","Toll Collectors Hierarchy (Leader)":"If this fighter passes a Bottle test, friendly Toll Collectors fighters within 12\" that have not already tested automatically pass their Bottle test this round.","Leader of the Ferrymen":"When this fighter is hired, choose one of the available profiles to represent them.","Abyssal Ferryman Team Hierarchy (Leader)":"After the gang has failed a Bottle test, if this fighter passes a Cool test in the End phase and does not flee, friendly Abyssal Ferryman fighters within 12\" automatically pass their Cool test and do not flee.","Deadzone Survivor":"When this fighter is hired, choose one of the available profiles to represent them.","Nimble":"This fighter has 4+ save that is not affected by Armour Piercing.","Rat Cunning":"If this fighter has at least one Necromundan Giant Rat, they gain a special 5+ save against environmental damage, taken before any other saves. Alternatively, one Necromundan Giant Rat may be removed to ignore the damage entirely.","Charmed Companion":"While within 3\" of their companion, that fighter may re-roll one failed armour save and one failed Ammo test each round.","Flight":"This fighter ignores terrain, moves freely between levels, and can never fall, but cannot pass through impassable terrain or end movement overlapping obstacles or fighters.","Spyrer Companion":"The Reflex Enhancers special rule applies to this fighter.","Experimental Elixirs":"Each time a Chem-Alchemy Elixir is purchased, reduce its cost by D6x10 credits, to a minimum of 10 credits.","Last Rites":"When an Escher Gang Matriarch or Queen is killed, roll a D6. If the result is equal to or less than their number of advances, add a new freshly hired Death-maiden to the gang.","Long Leash":"This Exotic Pet must remain within 12\" of its owner instead of the usual 3\".","Psychoteric Node":"When using a Wyrd Power, this fighter may channel it through one of their Psychoteric Wyrm within 12\" that is not Engaged or Seriously Injured. Range and line of sight are measured from the Wyrm, but the Willpower test is made by the fighter, who also suffers any Perils of the Warp effects if a double 1 is rolled.","Focus of Faith":"For each friendly Cherub-servitor on the battlefield that is not Seriously Injured or Fleeing, the gang can re-roll one D6 when rolling Faith dice.","Feral Warriors":"This fighter gains +1 Attack while they have one or more Flesh Wounds.","Frenzon Conditioning":"This fighter never suffers Side Effects from using Frenzon.","Weapon Hardpoint":"The Vehicle has X Weapon Hardpoint(s). Any weapon mounted there gains either Crew Operated or Passenger Operated and Arc (X) traits.","Power Ram":"Adds +2 Strength, AP, and Damage to any vehicle impact made from the Front arc.","Hybrid Drive":"Treated as both wheeled and tracked. May choose which rules to apply when interacting with difficult terrain.","Upgrade Slots":"The Vehicle has dedicated slots for vehicle Upgrades.","Jury-rigged":"When using Negotiate Repairs post-battle action for this vehicle, the credit cost of repairs is doubled.","Locomotion":"This vehicle has a specific Locomotion special rule.","The Good Stuff":"Any fighter within 1\" of the Wild Snake Vat may perform the Take a Swig (Basic) action: remove a Flesh Wound and place an Intoxicated marker on them.","High-pressure Vapours":"If a Wild Snake Vat is hit, roll a D6 and add the weapon\u2019s Strength. On a 9+, centre a 5\" Blast marker on the Vat. Fighters touched must pass an Initiative test or gain an Intoxicated marker. If the weapon has Blaze, they instead take a S4, AP-1, D1 hit with Blaze on failed Initiative.","Wild Snake Intoxication":"Intoxicated markers remain for the rest of the battle. The effects depend on how many markers the fighter has.","Dedicated Gunner":"When performing a Move & Shoot (Basic) action, this vehicle may move up to its full Movement characteristic instead of half.","Wheeled":"This vehicle uses wheels for locomotion, which affects how it interacts with difficult terrain.","Agile":"When performing a Move (Simple) action, this vehicle may make two 90\u00b0 turns before, during, or after its move, instead of the usual one.","Orlock Wild Child":"Vespa Merdena is a Bounty Hunter who may only be hired by House Orlock gangs.","Transport Area":"A part of the model is a Transport area.","Techmite Oculi Control Node":"May be equipped with a Techmite Oculi, which will Group Activate as if the vehicle were a fighter.","Waterborne":"This vehicle may only be used in Sump Sea environments. When activated, it must drift forward before taking actions - Scrap Skiffs drift D3\" and Sludge Barges drift D6\". Drift does not use actions but may cause collisions.","Additional Attacks (X)":"Grants X extra attacks during an Attack (Basic) or Reaction attack, but cannot be used for normal attacks. Fighters with only weapons with this trait must fight unarmed. Weapons with this trait do not count towards a fighter's weapon limit.","Arc (X)":"Vehicle-mounted weapon's vision arc is indicated in brackets (Front, Left, Right, Rear, All Round). Trait and vision arc is determined by vehicle, may vary for same weapon on different vehicles.","Assault Shield/Energy Shield":"Grants improved save against attacks from the 90\u00b0 front. - Melee attacks: +2 Save modifier. - Ranged attacks: +1 Save modifier.","Blast (3\"/5\"/*)":"The weapon utilises a Blast marker.","Blaze":"A target not taken Out of Action catches on fire on 4+.","Chem Delivery":"Declare what type of equipped chem is used. If the weapon also has Toxin or Gas, these Traits can be used instead.Instead of making a wound roll, roll equal to or higher than the Toughness (inverse Toughness test) to inflict the dose. A result of 6 (before modifiers) always succeeds.","Combi":"A combi-weapon has 2 profiles. When fired, pick a profile for the attack.","Concussion":"-2 Initiative/Handling (minimum 6+) until the end of the round.","Crew Operated":"Vehicle-mounted weapon operated by vehicle crew, usable during vehicle's activation. Use the BS characteristic of the crew. Unwieldy trait doesn't apply.","Cursed":"When hit, pass a Willpower test or become Insane.","Deflagrate":"If the weapon wounds, deals another 1 automatic hit with the same weapon profile.","Defoliate":"Deals D3 Damage to Carnivorous Plants.","Demolitions":"Can use the Grenade in close combat attacks against scenery targets (doors/objectives).","Digi":"Can be used in addition to any other Melee weapons, granting an additional close combat attack.","Drag":"If hit (and not taking the target Out of Action), the target can be dragged closer to the attacker.","Entangle":"Hits from Entangle weapons cannot be parried. If the hit roll is a natural 6, Reaction attacks against the attacker suffer an additional -2 to hit.","Esoteric":"Cannot be given any Weapon Accessories, upgraded or modified in any way.","Fear":"Instead of suffering an Injury roll, the target must pass a Nerve test with a -2 modifier or immediately become Broken (run for cover).","Firestorm (X)":"When a Firestorm weapon hits, the nearest model suffers a number of hits equal to bullet holes rolled on the Firepower dice. Roll up to X Firepower dice. Make an Ammo check for each Ammo symbol\u2014fail 1 and the weapon is Out of Ammo, fail 2+ and it jams for the rest of the battle.","Fixed":"Represented by a weapon on its own base (not equipped by a fighter).","Flare":"A fighter hit becomes Revealed (if in darkness).","Flash":"Instead of making a wound roll for models hit, pass an Initiative/Handling test or become subject to the Blind condition.","Force":"When wielded by a Psyker, gain Power and Sever traits","Gas":"Instead of making a wound roll, roll equal to or higher than the Toughness to inflict an Injury roll.","Graviton Pulse":"Instead of making a wound roll, pass a Strength test or suffer Damage. No save roll can be made.","Grenade":"Grenades are Wargear (not a weapon), but treated as a special type of ranged weapon that can be thrown as a Shoot (Basic) action.","Gunk":"Gain the Gunk condition: -1\\\" M, no additional M when charging, -1 to Initative tests, catch fire on 2+ when hit with Blaze.","Haemophagic":"When resolving a Toxin attack with this weapon, apply a +1 modifier if this weapon has previously hit the target.","Haywire":"When hitting a vehicle, roll a D6 instead of wounding normally, on a 4+, it is wounded. If the weapon has Strength *, it cannot harm fighters or pin them. Otherwise, resolve hits as normal.","Hexagrammatic":"Hits ignore Psychic power saves. 2x damage against Psykers.","Impale":"If a target is wounded, the projectile continues through and can hit another fighter.","Knockback":"If the hit roll meets or beats the target's Strength, they are pushed 1\" away. Add +1 Damage if blocked by terrain or model. Blast weapons push from the marker's centre; use Scatter dice if centred. Melee attackers may follow up unless attacking over a barricade. Test Initiative if pushed off edge.","Lance":"+1S while Mounted when Charging or Ride By.","Lance-bomb":"First successful hit uses the 'Primed' profile, all other this battle use the 'Spent' profile.","Limited":"When limited ammo run out, that type is permanently lost and can't be used again until more is purchased.","Master-crafted":"Once per battle, re-roll a single failed hit roll.","Melee":"Applies to all weapons with range E (Engaged). Can be used during close combat attacks.","Melta":"Applies to short range hits (or any hit if there is no short range): If reduced to 0 Wounds, any Injury dice are automatically Out of Action (no need to roll).","Paired":"Counts as being equipped with dual Melee weapons when calculating the number of Attack dice.  When charging, Attack characteristic is doubled. Mounted fighters do not benefit from this trait.","Passenger Operated":"Vehicle-mounted weapon operated by fighters other than the Crew, usable during a fighter's activation if within 1\" of the weapon. Cannot be fired more than once per round. Unwieldy trait doesn't apply.","Phase":"Ignore saves from armour and field armour (saves from special rules can still be used).","Plentiful":"Ammo tests are automatically passed (no roll is required) when reloading.","Power":"Can't be parried except by other Power weapons.A hit roll of 6 gives:Ignores Save rolls (except Field armour).+1 Damage (does not apply in combination with certain other traits like Toxin).If a weapon with this trait is used by a model being hidden, the model becomes revealed for this round.","Power Pack":"Doesn't take up any regular weapon slots. If also Melee, grants 1 bonus attack.0-2 weapons with this trait per fighter","Pulverise":"After inflicting an Injury roll, roll a D6. If the result is equal or higher than the target's Toughness, or a 6 (before modifiers), change an Injury dice from Flesh Wound to Serious Injury.","Rad-phage":"After fully resolving all hits, roll 4+ per fighter hit to inflict a single Flesh Wound.","Rapid Fire (X)":"A successful hit scores a number of hits equal to the number of bullet holes on the Firepower dice.","Reckless":"Ignores Target priority. Randomize the target from all eligible targets (friend & foe).","Rending":"If the wound roll is a 6+, +1 Damage.","Scarce":"Can't be reloaded - once Out of Ammo, this weapon can't be used again during the battle.","Scattershot":"If hit, inflict D6 wound rolls instead of 1.","Seismic":"Always pins a fighter. A vehicle hit must always make a Loss of Control test.A wound roll of 6 (before modifiers) ignores save rolls.","Sever":"Injury rolls inflicted with this weapon are automatically Out of Action.","Shield Breaker":"Ignore the effects of shields. Field armours must roll twice and apply the lowest result.","Shock":"If the hit roll is a 6 (before modifiers), the attack automatically wounds.","Shred":"Double the AP if the Wound roll is a 6 (before modifiers).","Sidearm":"Can be used for both ranged and close combat attacks.","Silent":"- Sneak Attack (scenario special rule): No test to see whether the alarm is raised when this weapon is fired.- Pitch Black (scenario special rule): A Hidden fighter is not Revealed when using this weapon.","Single Shot":"Can only be used once per battle.","Smoke":"Mark the hit location with a counter. The smoke extends 2.5\\\" vertically and horizontally from the centre and blocks LOS.","Template":"Applies to all weapons with range T (Template). Use the Flame template to determine how many targets are hit.","Toxin":"Instead of making a wound roll, roll equal to or higher than the Toughness to inflict an Injury roll (regardless of Wounds).","Twin-linked":"Re-roll any number of the ammo dice but must accept the result of the re-roll.","Unstable":"If the Ammo symbol is rolled when attacking, roll a 4+ or the attacker suffers a catastrophic overload and go Out of Action.","Unwieldy":"Ranged: A Shoot action counts as a Double action (instead of Basic).Melee: Requires 2 hands so a second weapon can't be used at the same time (dual wielding).","Versatile":"A fighter with a Versatile weapon does not need to be B2B with an enemy fighter to Engage and attack in melee.","Vortex":"A fighter who is hit must make an Initiative test. If successful, move them the shortest distance to avoid the Blast marker. Otherwise, they immediately go Out of Action. Any obstacles hit by the Vortex is removed from the battlefield. Any vehicle is wrecked and removed.At the start of each End Phase:1-2\tVortex vanishes. Remove the Blast marker.3-4\tVortex remains. Models touching it next round are hit.5-6\tMove the Vortex D6+2\" randomly. Models/terrain in its path or under it are hit.","Web":"A successful wound roll inflicts an automatic Seriously Injured result (Webbed). No save roll can be made. Roll for Recovery during the End phase and apply the result as normal, with the following exceptions:Flesh Wound: No longer webbed.Seriously Injured: Still webbed.Out of Action: 'Out Cold' (no Lasting Injury roll).","Whispering":"Cannot be unequipped, upgraded or be affected by the Disarm trait. When taking OOA an enemy with a Fight (Basic) action, gain an additional Fight (Basic) action.The weapon's owner cannot be removed from the Gang; if killed, roll a D6. 2-6: the weapon can be sold; 1: another fighter must equip it. If owner is taken OOA, also apply these effects:Have been OOA:1+: All the fighter's weapons gain the Reckless trait.2+: Whispering Weapon's Strength increases by 1.3+: Fighter starts every battle with the Insane condition.4: Fighter is killed.","Ablative overlay":"Improves save by 2 the first time, and by 1 the second time, then it is spent.","Archaeo-carapace":"Ancient tech granting 4+ save. Some lasting injuries grant bionics but risk insanity.","Armourweave":"Xenos tech granting 5+ save that cannot be reduced below 6+.","Carapace armour (light)":"4+ save.","Carapace armour (heavy)":"4+ save, 3+ vs front attacks. When charging: -1 Initiative, -1 Movement.","Ceramite shield":"+2 to save vs front attacks. Move action becomes Basic. Ignores the effect of the Melta trait vs front attacks. -1 weapon capacity. Can be equipped with a suit of armour.","Flak armour":"6+ save, 5+ vs Blast/Flame.","Gutterforged cloak":"6+ save, 5+ vs underhive perils or environmental effects.","Hazard suit":"6+ save, +3 Toughness vs Gas if wearing a respirator. Immune to Blaze/Rad-phage traits.","Mantle malifica":"5+ save. 4+ invulnerable save vs the effects of psychic powers but has to do a Willpower test in the end phase of each round or gets Insane.","Mesh armour":"5+ save.","Reflec shroud":"5+ save, ignores AP of las, plasma and melta weapons.","Scrap shield":"+1 to save vs Reaction attacks while Standing and Engaged. Can be equipped with a suit of armour.","Armoured bodyglove":"Improves save by 1, immune to Rad-phage, combinable with other armour except undersuit.","Furnace plates":"6+ save, 5+ from front.","Hardened flak armour":"6+ save, 5+ vs Blast/Flame, reduces AP by 1.","Layered flak armour":"5+ save, 4+ vs Blast/Flame.","Hardened layered flak armour":"5+ save, 4+ vs Blast/Flame, reduces AP by 1.","Incombustible hauberk":"5+ to ignore Blaze, +1 to extinguish, combinable with other armour.","Plate mail":"6+ save, 5+ from front and vs Blast.","Exo-suit":"This fighter has a 5+ armour save and is immune to the effects of Blaze and Rad-phage weapon traits. Ironhead Squat Prospectors only.","Conversion field":"Roll D6 when hit: on 5+, attack has no effect. All fighters within 3\" are hit by Flash, except wearer","Displacer field":"Roll a D6 per hit: on 4+, hit ignored and wearer moves distance equal to attack's Strength in random direction. Cannot end in terrain/hazards or within 1\" of enemy.","Refractor field":"Roll D6 when hit: on 5+, hit ignored. On successful save, roll D6: on 1, field burns out and is removed","Archaeotech device":"Ancient technological device with random effects determined by rolling on the Archaeotech Device table when purchased. New users must pass Intelligence test to activate.","Armoured undersuit":"Improves save by 1. Can be worn with any armour except armoured bodyglove. Grants 6+ save if no other save present.","Bio-booster":"First Injury roll each battle rolls one less dice. If only one dice would be rolled, roll two and discard one.","Bio-scanner":"Sentry can spot attackers outside vision arc. +1 to spotting rolls (natural 1 still fails).","Blind snake pouch":"Grants Dodge skill. If already has Dodge, succeeds on 5+. Against Overwatch, succeeds on 4+.","Cameleoline cloak":"If wearer did not move during activation, ranged attacks suffer -2 to hit until next activation.","Chem-synth":"At activation start, pass Intelligence test to reduce target's Toughness by 1 against Gas/Toxin weapons until end of activation.","Chrono-crystal":"Used according to scenario special rules.","Cred sniffer":"If fighter not Out of Action/Seriously Injured, earn 4D6 credits post-battle. Only one per gang.","Cult icon":"One per gang. Bearer with Group Activation can activate one additional Ready friendly fighter.","Data-thief":"At battle start, make opponent randomly reveal one gang tactic.","Dome runner map / Ratskin map":"Before scenario roll, use map to modify scenario selection. Effects determined by table roll.","Drop rig":"Allows Descend (Basic) action: move 3\" horizontally and 12\" vertically downward.","Dustback helamite":"Grants Mounted condition, Movement 8\", and Mighty Leap skill.","Escher cutter":"Grants Mounted condition. Movement increased to 9\", ignores terrain, free level movement, cannot fall. Cannot cross impassable terrain or end on obstacles/within 1\" of fighters. Includes Deploy Gas Trap Action to place gas trap within 1\" and move. Must select one weapon option that gains suspensors and doesn't use weapon slot: twin-linked grenade launchers (frag & krak) for 75 credits, twin-linked heavy stubbers for 200 credits, or twin-linked plasma guns for 110 credits.","Falsehood":"Cannot be targeted by attack/psychic power. Last until the end phase of the second round or if making an attack/psychic power.","Filter plugs":"+1 Toughness vs Gas weapons. Single use.","Frenzon collar":"Permanently under Frenzon effects. Leader/Champion with master motivator can group activate collared fighters anywhere on battlefield.","Forged guilder seal":"Reduces Trading Post Rarity by 2 and prices by 3D6 (min 10). Double 1 or double 6 on price roll causes discovery, loss of seal and Outlaw status.","Grapnel launcher":"Grapnel (Double) action: move 12\" straight line in any direction, including different levels.","Grav-chute":"No damage from falling or jumping down levels.","Guilder cartograph":"Can change Badzone Environment and place four loot caskets during deployment. Roll D6 post-battle, expires on 1-3.","Halo device":"Transfer Lasting Injury to another gang member, bearer counts as Out Cold instead.","Harrier-skulls":"Exotic Beasts must pass Intelligence test to attack bearer.","Hexagrammic fetish":"Roll D6: 1=useless (sell for 3D6), 2-5=-1 to Psyker Willpower tests, 6=-3 to Psyker Willpower tests.","Holochromatic field":"-2 to hit with ranged attacks, -1 in melee. Roll D6 each attack, deactivates on 1. Always counts as revealed in Pitch Black.","Industrial respirator":"Adds 3 to fighter's Toughness (4 if combined with Hazard Suit) vs Gas weapons. Once per battle can use air supply to gain immunity to Gas, act normally while on fire, and ignore breathing effects until next activation.","Lho sticks":"Friendly fighters with Intelligence 8+ within 6\" and LoS may use this fighter's Cool characteristic.","Lock-punch":"When taking Force Door action, add 4 to Strength. Doors opened are permanently damaged and removed.","Magnacles":"Attack (Basic) to lock enemy in base contact (requires failed Initiative test). Target cannot move, -2 to hit in melee, no ranged attacks. Break free with Break Bonds (Double) action, requires 2D6 \u2264 Strength (+2 per friendly in base contact).","Malefic artefact":"Roll D6 when purchased to determine type. New users must pass Intelligence test to activate. Effects vary by type (1-Cursed, 2-Whisper Vox, 3-Void Gate, 4-Aetheric Lantern, 5-Chronoscope, 6-Terror Telepathica).","Medicae kit":"When assisting friendly fighter's Recovery test, roll extra Injury dice and choose one to discard.","Mnemonic inload spike":"User rolls on Lasting Injuries table. If survives, gains one skill from Agility, Brawn, Combat, Cunning, Ferocity, Leadership, Savant or Shooting. Single use.","Photo-goggles":"Can attack through smoke, +9\" to Visibility (X\"), +1 to Flash weapon Blind tests.","Photo-lumen":"+9\" to Visibility (X\"). Cannot be Hidden when Visibility (X\") in effect, always Revealed.","Psi-grub":"Gains token when using/targeted by psychic power. Can attempt Tap Psi-grub (Basic) to use power without Willpower test if D6 \u2264 tokens. Explodes at 6 tokens.","Respirator":"+2 Toughness vs Gas weapons.","Sanctioning writ":"Place Bounty on Law Abiding gang member. Single use.","Second best":"Take a Swig (Simple) action, roll D6 (1-3 empties bottle). Gain Intoxicated marker, remove Flesh Wound. Effects vary by markers: 1(-1 hit/+1 Cool), 2(-2 hit/+2 Cool/Initiative test for moves), 3+(-3 ranged/-1 melee/+3 Cool/D6\" random movement).","Servo harness (partial)":"+2 Strength, +1 Toughness, Unwieldy weapons gain suspensors (Weapon Accessory). -1 Movement and Initiative.","Servo harness (full)":"+2 Strength, +1 Toughness, Unwieldy weapons gain suspensors (Weapon Accessory). No Movement/Initiative penalty.","Skinblade":"+2 to escape roll if Captured. Lost if successful.","Stimm-slug stash":"Once per battle at activation start: remove Flesh Wound, +2 Move/Strength/Toughness until round end. Roll D6 in End phase, on 1 roll Injury dice.","Strip kit":"+2 to Intelligence tests for door terminals or loot casket locks.","Suspensor harness":"Can carry 4 weapons (6 for Bounty Hunters). (*) weapons still count as two.","Threadneedle worms":"Can of Worms (Basic) action, single use. Roll D6: 1(user injury), 2-3 (5\" blast D6\" away), 4-5 (three connected 5\" blasts), 6 (all enemies roll an injury dice, OOA count as Seriously Injured).","Web solvent":"Roll an extra Injury dice for Webbed Recovery, choose one. When assisting, roll two extra dice.","Wild snake":"Take a Swig (Simple) action, roll D6 (1-2 empties bottle). Gain Intoxicated marker, remove Flesh Wound. Effects by markers: 1 (-1 hit/+2 Cool), 2 (-1 hit/+3 Cool/random targets), 3+ (auto pass Cool/-2 hit).","Xenoculum":"Roll D6 when purchased: 1(trap), 2(claws), 3(ghost form), 4(horror aura), 5(chem factory), 6(brain booster). New users must pass Intelligence test.","Arachni-rig jump boosters":"Once per activation during Move or Charge, adds 3\" to Movement. Up to half movement can be vertical. +1 to Hit rolls and Strength when charging.","Ash waste grav-cutter":"Increases Movement by 2\". Grants Mounted condition. Ignores terrain and moves freely between levels. -1 to cover modifiers against ranged attacks. Ignores Hands Full rule.","Ash cloak":"Counts as respirator. On 5+ ignore wound loss from battlefield conditions.","Augurspex":"Enemy fighters cannot be set up within 12\" as Reinforcements or using Infiltrate.","Book of the Redemption":"Can perform Words of Wrath (Basic) action to allow friendly Cawdor fighters within 6\" to re-roll Charge D3 or single natural 1 for Hit rolls.","Bomb delivery rats":"Deploy rats carrying grenades. Rats move 6\", ignore terrain except impassable. Detonate on 2+ when near fighters. Can be shot at with -1 to hit.","Camoelean elixir":"-2 to ranged hit rolls, -1 to close combat. If not carrying Unwieldy weapons and has 5+ armor save, can only be targeted within 6\" if didn't move last activation.","Draconic scales":"Armor save cannot be modified or negated by any rule or trait.","Grav-cutter":"+2\" Movement, ignores terrain, moves between levels freely. No Pinning from ranged attacks. -1 to cover modifiers. Must use Stand Up (Double) if Prone.","Jump booster":"Once per activation adds 3\" Movement in safe mode or D3+3\" when overcharged. Half movement can be vertical. +1 to Hit and Strength when charging.","Mirror aegis":"First hit each battle: on 2+ negate attack and relocate the holder of the mirror within 6\" but the mirror has no further effect in this battle. On 1, resolve attack as normal.","Proximity auspex":"Can perform Scan For Threats (Basic) action to make enemy model within 24\" Revealed until end of round.","Psychofamile pheromone":"Enemies within 3\" must pass Willpower test to attack them, or action is wasted.","Psychomancer's harness":"+2\" Movement, vertical distance not halved when climbing. Includes paired psychomantic claws. Limited to two non-Unwieldy weapons.","Pyromantic mantle":"Melee and Versatile weapons gain the Blaze trait during activation.","Radcounter":"Cannot be the random target of Events unless no other fighters available.","Ridge walker":"Grants Mounted condition. Movement increased to 9\". +1 to Initiative checks.","Refraction cloak":"-1 to ranged Hit rolls (-2 if the fighter didn't move in previous activation).","Rocket pack":"First Ammo check for charge caster within 3\" each battle automatically passes.","Servo-medicae":"Can perform Medicate (Basic) action to allow Seriously Injured friendly fighter within 1\" to make Recovery roll.","Sky mantle":"Can perform Hide in the Wastes (Double) to gain Hidden condition if 12\" from enemies, even without Pitch Black rules.","Vox array":"Gains Group Activation (1) special rule.","Waster's dirtbike":"Grants Mounted condition. Movement increased to 8\".","Venom sacs":"At the start of their activation, a Standing fighter may take an Initiative test. If passed, all Gas or Toxin weapons they use this activation reduce the target's Toughness by 1.","Treatment pouch":"Allows this fighter to perform a free Medical Escort post-battle action, even if they are not normally eligible. A roll of 6 is treated as Stabilised rather than Full Recovery.","Exotic furs":"When making a Trade action in post-battle, add +1 modifier to the Availability Level roll.","Gold-plated gun":"Any ranged weapon can be gold-plated. Improves Leadership by 1. Once per battle, may re-roll a failed Ammo test.","Master-crafted weapon":"Any weapon gains the Master-crafted trait. Cost is weapon cost plus 25%, rounded up to nearest 5 credits.","Opulent jewellery":"May re-roll the dice when determining the Doc's fee during Medical Escort action.","Uphive raiments":"If not In Recovery during post-battle, gain extra D3x10 credits during Collect Income step.","Sensor skull":"Grants bio-scanner benefits. When taking Aim (Basic) action, add 2 to hit rolls for subsequent shots in same activation.","Medi skull":"When making Recovery test, roll extra Injury dice and choose one to resolve.","Gun skull":"Equipped with autopistol. Rolls extra hit and Ammo dice when owner attacks. BS 5+, never benefits from aiming or modifiers.","Lobo chip - Mundane":"[Humiliated Lasting Injury] Mundane version increases either Leadership or Cool by +1.","Lobo chip - Improved":"[Humiliated Lasting Injury] Improved version increases both Leadership and Cool by +1.","Cortex-cogitator - Mundane":"[Head Injuries Lasting Injury] Mundane version increases either Intelligence or Willpower by +1.","Cortex-cogitator - Improved":"[Head Injuries Lasting Injury] Improved version increases both Intelligence and Willpower by +1.","Bionic eye - Mundane":"[Eye Injuries Lasting Injury] Increases the fighter's Ballistic Skill by +1","Bionic arm - Mundane":"[Hand Injuries Lasting Injury] Increases the fighter's Weapon Skill by +1","Bionic leg - Mundane":"[Hobbled Lasting Injury] Increases the fighter's Movement by +1\"","Skeletal enhancers - Mundane":"[Spinal Injury Lasting Injury] Increases the fighter's Strength by +1","Aortic supercharger - Mundane":"[Enfeebled Lasting Injury] Increases the fighter's Toughness by +1","Frenzon":"Grants Nerves of Steel, True Grit, Unstoppable and Berserk skills. All weapons gain Reckless trait. Must move toward nearest enemy or Charge if possible unless Standing and Engaged or Prone and Seriously Injured. Side effects: Toughness check in Wrap-up (+2 to roll) or become addicted. Addiction requires dose to be included in crew, curable with 2D6x10 credits anti-addiction chems.","Ghast":"Roll D6: On 1, become Insane. On 2-5, gain random Wyrd Power from the Wyrd Powers table. On 6, gain both. Side effects: Failed Willpower test reduces Willpower by 1. Natural 12 causes permanent Insane condition.","Icrotic slime":"Make characteristic checks for M, S, T, I, A, and Cl. Each success improves that characteristic by D3. Side effects: sets Ld, Int, and Will to 10+ if not worse. After battle, roll 2D6: 2 kills fighter, 3-11 puts Into Recovery, 12 causes a Lasting Injury but re-roll Bitter Enmity, Captured, Critical Injury and Memorable Death).","Kalma":"When making an action, roll 2D6+T: On 11 or less, the action is wasted. On 12+, shakes off effects. Can be used on captured fighters in Rescue scenario. No long-term effects.","Obscura":"Changes Movement to D6\", weapons gain Reckless. Must move full distance in straight line. Can attempt to shake off in End phase with 2D6+T roll of 12+. Side effects: Limits to one action per activation after wearing off. Toughness check in Wrap-up or become addicted. Addiction requires 4+ on D6 to be included in crew, curable with 2D6x10 credits anti-addiction chems.","'Slaught":"Improves WS and I to 2+, adds +1 to their Attack. Side effects: Toughness check in Wrap-up or become addicted. Addiction worsens WS/I to 5+ and A to 1 without dose, improves to WS/I 3+ with dose. Curable by voluntary Recovery.","Spur":"Increases M by 2 and improves I to 2+. Check if wears off in End phase with 2D6+T roll, on 10+ effects end.","Stinger mould":"Can be used after Lasting Injury roll to change result to Out Cold (except Memorable Death). Alternatively, can attempt to remove existing Lasting Injury on 5+ during post-battle sequence. No long-term effects.","Ammo cache":"Added to gang's Stash. At battle start, place within 1\" of fighter in deployment zone. If defending, roll D6: on 1-4 cache cannot be used, on 5-6 it can be used. Removed from Stash when placed.","Booby traps - frag":"Place marker at battle start. When model comes within 2\", roll D6: 1=dud (remove), 2-3=no effect, 4-6=explodes. Can be shot at (-1 Short/-2 Long), if booby trap is hit roll D6: 1-2=no effect, 3-4=triggers, 5-6=disarmed.","Booby traps - gas":"Place marker at battle start. When model comes within 2\", roll D6: 1=dud (remove), 2-3=no effect, 4-6=explodes. Can be shot at (-1 Short/-2 Long), if booby trap is hit roll D6: 1-2=no effect, 3-4=triggers, 5-6=disarmed.","Booby traps - melta":"Place marker at battle start. When model comes within 2\", roll D6: 1=dud (remove), 2-3=no effect, 4-6=explodes. Can be shot at (-1 Short/-2 Long), if booby trap is hit roll D6: 1-2=no effect, 3-4=triggers, 5-6=disarmed.","Isotropic fuel rod":"Can be used to convert any Territory into a Settlement Territory. Consumed when used.","Mung vase":"Status Item kept in Stash. Reduces Hired Gun cost by D6x10 (min 10). After battle, roll D6: on 1 both vase and Hired Gun disappear. Can be sold in post-battle. Lost if gang Leader dies.","Corpse grinder cult icon":"One per gang, Leader/Champion only. Action - Enrage: All friendly Standing and Active fighters within 6\" with Ready marker add D3\" to Move until End phase.","Caryatid":"0-1. Any Gang Leader.","Grapplehawk":"0-2. Any Gang Leader or Champion.","Gyrinx Cat":"0-1. Any Gang Leader or Champion.","Hacked Cyber-mastiff":"0-1. Any Gang Leader or Champion.","Necromundan Giant Rat":"0-3. Any Gang Leader or Champion.","Cherub-servitor":"Any Redemptionist Gang Leader or Champion.","Sheen Bird":"Any Cawdor Gang Leader or Champion.","Cephalopod Spekter":"0-3. Any Gang Leader, Champion or Psy-Gheist (Prospect).","Psychoteric Wyrm":"0-2. Any Psy-Gheist (Prospect).","Phyrr Cat":"0-2. Any Gang Leader, Champion.","Phelynx":"0-3. Any Escher Wyld Runner (Prospect).","Sumpkroc":"0-1. Any Gang Leader or Champion","Cyber-Mastiff":"0-2. Any Gang Leader or Champion","Cyberachnid":"0-3. Any Gang Leader or Champion.<br />0-2 for Augmek (Champion)","Hardcase Cyber-Mastiff":"0-2. Any Gang Leader or Champion.","Psychic Familiar":"0-3. Any Gang Leader or Champion.","Chaos Familiar":"0-2. Any Gang Leader or Champion.","Techmite Autoveyor":"0-2. Any Gang Leader or Champion.","Techmite Exovator 078B":"0-2. Any Gang Leader or Champion.","Techmite Oculi":"0-2. Any Gang Leader or Champion.","Caryatid Prime":"0-1. Any Gang Leader or Champion.","Ablative armour":"First non-Glancing Hit to Body location in each battle counts as Glancing Hit.","Chrono-cradle":"Allows mounting a Chrono-crystal on the vehicle.","Crash cage":"First non-Glancing Hit to Crew location in each battle counts as Glancing Hit.","Electrified hull":"Fighters on hull (not transport bed) suffer S3, AP-, D1 hit with Shock trait.","Electrostatic projector":"Basic Action: Roaming Horrors within 18\" may only perform one action this round.","Escape hatches":"May re-roll results on the Lasting Injury table for crew.","Explosive ram":"First head-on collision causes additional S5, AP-2, D2 hit.","Extra armour":"Increases Toughness by 1 in all locations.","Ram":"Adds 1 to Strength, AP and Damage of Front arc vehicle impacts.","Reinforced armour":"Increases starting HP by 1.","Rockgrinder ram":"Adds 2 to Strength, AP and Damage of Front arc vehicle impacts.","Speed fins":"If no turns made during activation, increase Movement by 1\". Cannot be taken by Walkers.","Transport bed":"Fighters in defined area don't check falling when vehicle moves. Not for Walkers. Capacity based on physical space.","Transport cage - Small":"Enclosed cab for transporting fighters. Small holds 3 fighters, large holds 6. Requires access point. Fighters can Embark/Disembark as Basic action.","Transport cage - Large":"Enclosed cab for transporting fighters. Small holds 3 fighters, large holds 6. Requires access point. Fighters can Embark/Disembark as Basic action.","Turtle back":"On failed Loss of Control roll, loses 2 HP and auto-rights instead of becoming Wrecked.","Weapon hardpoint":"Adds one Weapon Hardpoint. Can be taken multiple times.","Weapons stash":"Vehicle counts as an Ammo Cache.","All-wheel steering":"Increases Handling by 1. Cannot be taken by Skimmers or Walkers.","Antigrav generators":"Gains Skimmer special rule, replacing current Locomotion rule.","Emergency brake":"Halve distance moved due to failed Loss of Control. Cannot be taken by Walkers.","Pneumatic radials":"No movement penalty in difficult terrain. Only for Wheeled vehicles.","Powered steering":"Can make two 90\u00b0 turns during Move action. Not for Skimmers or Walkers.","Redundant drive system":"First non-Glancing Hit to Drive location counts as Glancing Hit. Not for Walkers.","Tyre claws":"Increases Handling by 1. Only for Wheeled vehicles.","Archaeotech automantic reactor":"Increases Movement by 2\". When Wrecked, explodes causing S5, AP-1, D1 hits within 3\".","Easy turnover":"+1 modifier to engine restart checks.","Engine shell":"First non-Glancing Hit to Engine location counts as Glancing Hit.","Gas promethium engine":"Models within 1\" during movement suffer S3, AP-1, D1 hit with Blaze.","Glys injector":"Once per battle, increase Movement by 4\" for one activation.","Nitro burner":"Increases Movement by 1\".","Plasma coil engine":"Can increase Movement by 2\". On a roll of 1 after activation, lose 1 HP.","Smoke vents":"-1 to hit penalty for ranged attacks. Ignored by weapons ignoring Smoke trait.","Boarding ramp":"Fighters jumping from this vehicle to another within 3\" add 1 to Initiative check.","Body spikes":"Fighters moving on vehicle (except Transport area) must pass Initiative test or suffer S3, AP -, D1 hit. Does not pin.","Booby-trapped fuel tanks":"When Wrecked, roll D6 when fighter moves within 3\". On 5+ explodes: S6, AP -1, D1 hit with Blaze to all within 5\". Remove and roll Lasting Damage.","Caltrop launcher":"Lay Caltrops (Basic): Move straight forward, place 3 markers in Rear arc within 1\". Wheeled vehicles within 1\" make -2 Loss of Control test.","Chrono-static compass":"-1 to Roaming Horrors generation while on battlefield.","Flare launchers":"Launch Flares (Basic): All models within 12\" gain Revealed until End phase.","Headlights":"Toggle at activation start. When on, reveals all models within 12\" in LoS and Front arc. Vehicle also becomes Revealed.","Kill switch":"-1 to Lasting Damage roll if Wrecked by Engine hit.","Malstrain kill markings":"+1 BS when targeting Roaming Horror fighters.","Minelayer":"One use per battle. Lay Mine (Basic): Move straight forward, place melta trap in Rear arc within 1\". Additional mines (20 credits each) grant extra uses.","Searchlight":"Illuminate (Free): Target enemy within 30\" gains Revealed until next activation. This model also becomes Revealed.","Smoke launchers":"Launch Smoke (Basic): Place three smoke grenade markers within 2\".","Wheel scythes":"Models within 1\" take S3, AP -, D1 hit. Fighters are Pinned. Wheeled vehicles only.","Focusing crystal (Lasgun, Laspistol, Long las only)":"For las weapons only. Improves AP by 2. Gains Unstable trait.","Gunshroud":"A weapon gains the Silent trait.","Hotshot las pack (Lasgun and Laspistol only)":"Increases Strength to 4 and AP to -1. Loses Plentiful trait and Ammo reduced to 4+.","Infra-sight (Pistols, Basic, Special and Heavy Weapons)":"Cannot be fitted to Rapid Fire or Blast weapons. Can attack through smoke, increases Visibility by 9\". No penalty for partial cover, -1 for full cover.","Las-projector (Pistols, Basic and Special Weapons)":"Short range accuracy bonus improved by 1.","Mono-sight (Basic, Special and Heavy Weapons)":"Add 2 to hit roll instead of 1 when making an Aim action.","Psi-amplifier (Melee Weapons)":"Requires Psi Attune post-battle action (15+ on Trade roll). Weapon gains Force trait.","Suspensors (Weapons with the Unwieldy trait only)":"Ranged: becomes Basic action. Melee: can be used single-handed.","Telescopic sight (Pistols, Basic and Special Weapons)":"When using Aim action, Short range accuracy applies at Long range.","Electrostatic generator (Blast carbine, Blast rifle And Heavy blaster only)":"A weapon with an electrostatic generator gains Haywire."};
+
+function normaliseRuleName(name) {
+  const patterns = [
+    [/^(Group Activation)\s*\(\d+\)$/i, ' (X)'],
+    [/^(Rapid Fire)\s*\(\d+\)$/i, ' (X)'],
+    [/^(Gang Fighter)\s*\(\w+\)$/i, ' (X)'],
+    [/^(Promotion)\s*\(.+\)$/i, ' (X)'],
+    [/^Blast\s*\(.+\)$/i, 'Blast (3"/5"/*)'  ],
+    [/^(Devout Masses)\s*\(.+\)$/i, ' (X)'],
+    [/^(Tools of the Trade)\s*\(.+\)$/i, ''],
+  ];
+  for (const [pat, repl] of patterns) {
+    if (pat.test(name)) return name.replace(pat, repl);
+  }
+  return name;
+}
+
+function getRuleDesc(name) {
+  const norm = normaliseRuleName(name);
+  return RULES[norm] || RULES[name] || null;
+}
+
+let accessToken = null;
+let userId = null;
+
+function parseJwt(token) {
+  return JSON.parse(atob(token.split('.')[1]));
+}
+
+function show(id) {
+  ['login-screen','gang-screen','sheet-screen'].forEach(s =>
+    document.getElementById(s).style.display = s === id ? (id === 'login-screen' ? 'flex' : 'block') : 'none'
+  );
+}
+
+function api(path) {
+  return fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    headers: {
+      'apikey': ANON_KEY,
+      'Authorization': `Bearer ${accessToken}`,
+    }
+  }).then(r => r.json());
+}
+
+async function login() {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const btn = document.getElementById('login-btn');
+  const err = document.getElementById('login-error');
+  err.textContent = '';
+  btn.disabled = true;
+  btn.textContent = 'Signing in…';
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+      method: 'POST',
+      headers: { 'apikey': ANON_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.msg || data.error_description || 'Login failed');
+    accessToken = data.access_token;
+    userId = parseJwt(accessToken).sub;
+    show('gang-screen');
+    loadGangs();
+  } catch (e) {
+    err.textContent = e.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Sign In';
+  }
+}
+
+document.getElementById('password').addEventListener('keydown', e => {
+  if (e.key === 'Enter') login();
+});
+
+async function loadGangs() {
+  const list = document.getElementById('gang-list');
+  list.innerHTML = '<div class="loading">Loading gangs…</div>';
+  const gangs = await api(`gangs?user_id=eq.${userId}&select=id,name,gang_type,rating,credits,reputation,alignment&order=name`);
+  if (!gangs.length) { list.innerHTML = '<div class="loading">No gangs found.</div>'; return; }
+  list.innerHTML = gangs.map(g => `
+    <div class="gang-item" onclick="loadSheet('${g.id}')">
+      <div>
+        <div class="gang-name">${esc(g.name)}</div>
+        <div class="gang-meta">${esc(g.gang_type)} · ${g.alignment || ''}</div>
+      </div>
+      <div class="gang-rating">Rating ${g.rating}</div>
+    </div>
+  `).join('');
+}
+
+function showGangPicker() { show('gang-screen'); }
+function logout() { accessToken = null; show('login-screen'); }
+
+const CLASS_ORDER = { Leader: 0, Champion: 1, Specialist: 2, Ganger: 3, Crew: 4, Juve: 5 };
+
+async function loadSheet(gangId) {
+  show('sheet-screen');
+  const grid = document.getElementById('fighters-grid');
+  grid.innerHTML = '<div class="loading">Loading…</div>';
+  try {
+    const [gangs, fighters, allEquipment] = await Promise.all([
+      api(`gangs?id=eq.${gangId}&select=id,name,gang_type,credits,rating,reputation,alignment`),
+      api(`fighters?gang_id=eq.${gangId}&select=id,fighter_name,fighter_type,fighter_class,movement,weapon_skill,ballistic_skill,strength,toughness,wounds,initiative,attacks,leadership,cool,willpower,intelligence,credits,xp,kills,special_rules,killed,recovery&order=credits.desc`),
+      api(`fighter_equipment?gang_id=eq.${gangId}&gang_stash=eq.false&select=id,fighter_id,equipment_id,equipment(equipment_name,equipment_type,equipment_category,cost)`),
+    ]);
+
+    if (!Array.isArray(fighters) || !Array.isArray(allEquipment)) throw new Error('Unexpected API response');
+
+    const fighterIds = fighters.map(f => f.id);
+    const allSkills = fighterIds.length
+      ? await api(`fighter_skills?fighter_id=in.(${fighterIds.join(',')})&select=fighter_id,skills(name)`)
+      : [];
+
+    if (!Array.isArray(gangs) || !gangs[0]) throw new Error('Gang not found');
+    if (!Array.isArray(allSkills)) throw new Error('Skills query failed: ' + JSON.stringify(allSkills));
+
+    const gang = gangs[0];
+    document.getElementById('sheet-gang-name').textContent = gang.name;
+    document.getElementById('sheet-gang-type').textContent = `${gang.gang_type} · ${gang.alignment || ''}`;
+    document.getElementById('sheet-gang-stats').innerHTML = [
+      ['Rating', gang.rating],
+      ['Credits', gang.credits],
+      ['Rep', gang.reputation],
+    ].map(([l,v]) => `<div class="gang-stat"><div class="val">${v}</div><div class="lbl">${l}</div></div>`).join('');
+
+    // Weapon profiles for all weapons on this gang
+    const weaponEquipIds = [...new Set(
+      allEquipment
+        .filter(e => e.equipment?.equipment_type === 'weapon')
+        .map(e => e.equipment_id)
+    )];
+
+    let profilesByEquipId = {};
+    if (weaponEquipIds.length) {
+      const profiles = await api(
+        `weapon_profiles?weapon_id=in.(${weaponEquipIds.join(',')})&select=weapon_id,profile_name,range_short,range_long,acc_short,acc_long,strength,ap,damage,ammo,traits&order=sort_order`
+      );
+      if (Array.isArray(profiles)) {
+        for (const p of profiles) {
+          if (!profilesByEquipId[p.weapon_id]) profilesByEquipId[p.weapon_id] = [];
+          profilesByEquipId[p.weapon_id].push(p);
+        }
+      }
+    }
+
+    // Group equipment by fighter
+    const equipByFighter = {};
+    for (const row of allEquipment) {
+      if (!equipByFighter[row.fighter_id]) equipByFighter[row.fighter_id] = [];
+      equipByFighter[row.fighter_id].push(row);
+    }
+
+    // Group skills by fighter
+    const skillsByFighter = {};
+    for (const row of allSkills) {
+      if (!skillsByFighter[row.fighter_id]) skillsByFighter[row.fighter_id] = [];
+      if (row.skills?.name) skillsByFighter[row.fighter_id].push(row.skills.name);
+    }
+
+    // Sort fighters
+    const sorted = [...fighters].sort((a, b) => {
+      const ao = CLASS_ORDER[a.fighter_class] ?? 99;
+      const bo = CLASS_ORDER[b.fighter_class] ?? 99;
+      return ao !== bo ? ao - bo : b.credits - a.credits;
+    });
+
+    grid.innerHTML = sorted.map(f =>
+      renderFighter(f, equipByFighter[f.id] || [], profilesByEquipId, skillsByFighter[f.id] || [])
+    ).join('');
+
+  } catch(e) {
+    grid.innerHTML = `<div class="loading" style="color:#e07070">Error: ${esc(e.message)}</div>`;
+    console.error(e);
+  }
+}
+
+function renderFighter(f, equipRows, profilesByEquipId, skills) {
+  const cls = f.fighter_class || 'Ganger';
+  const stats = [
+    ['M', f.movement + '"'],
+    ['WS', f.weapon_skill + '+'],
+    ['BS', f.ballistic_skill + '+'],
+    ['S', f.strength],
+    ['T', f.toughness],
+    ['W', f.wounds],
+    ['I', f.initiative + '+'],
+    ['A', f.attacks],
+    ['Ld', f.leadership + '+'],
+    ['Cl', f.cool + '+'],
+    ['Wil', f.willpower + '+'],
+    ['Int', f.intelligence + '+'],
+  ];
+
+  const weapons = equipRows.filter(e => e.equipment?.equipment_type === 'weapon');
+  const wargear = equipRows.filter(e => e.equipment?.equipment_type === 'wargear');
+  const specialRules = (f.special_rules || []);
+
+  // Collect all rule names from special rules, skills, weapon traits, wargear
+  const ruleNames = new Set();
+  for (const sr of specialRules) ruleNames.add(sr);
+  for (const s of skills) ruleNames.add(s);
+  for (const w of weapons) {
+    const profiles = profilesByEquipId[w.equipment_id] || [];
+    for (const p of profiles) {
+      if (p.traits) p.traits.split(',').map(t => t.trim()).forEach(t => ruleNames.add(t));
+    }
+  }
+  for (const g of wargear) ruleNames.add(g.equipment.equipment_name);
+  // Build resolved rule entries (name + description), deduped, only those with a description
+  const ruleEntries = [...ruleNames]
+    .map(n => ({ name: n, desc: getRuleDesc(n) }))
+    .filter(r => r.desc)
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  const statusParts = [];
+  if (f.xp) statusParts.push(`XP: <span class="val">${f.xp}</span>`);
+  if (f.kills) statusParts.push(`Kills: <span class="val">${f.kills}</span>`);
+  if (f.recovery) statusParts.push(`<span class="recovery-tag">RECOVERY</span>`);
+  statusParts.push(`Cost: <span class="val">${f.credits}cr</span>`);
+
+  return `
+<div class="fighter-card${f.killed ? ' dead' : ''}${f.recovery ? ' recovery' : ''}">
+  <div class="card-header ${cls}">
+    <div class="fighter-name ${cls}">${esc(f.fighter_name)}</div>
+    <div class="fighter-type-label">${esc(f.fighter_type)}</div>
+  </div>
+  <div class="stat-row">
+    ${stats.map(([k,v]) => `<div class="stat-cell"><span class="sv">${v}</span><span class="sk">${k}</span></div>`).join('')}
+  </div>
+  ${statusParts.length ? `<div class="status-row">${statusParts.join(' · ')}</div>` : ''}
+  ${weapons.length ? `
+  <div class="section">
+    <div class="section-title">Weapons</div>
+    ${weapons.map(e => renderWeapon(e, profilesByEquipId)).join('')}
+  </div>` : ''}
+  ${wargear.length ? `
+  <div class="section">
+    <div class="section-title">Wargear</div>
+    <div class="wargear-list">
+      ${wargear.map(e => `<span class="wargear-tag">${esc(e.equipment.equipment_name)}</span>`).join('')}
+    </div>
+  </div>` : ''}
+  ${skills.length ? `
+  <div class="section">
+    <div class="section-title">Skills</div>
+    <div class="skills-list">
+      ${skills.map(s => `<span class="skill-tag">${esc(s)}</span>`).join('')}
+    </div>
+  </div>` : ''}
+  ${ruleEntries.length ? `
+  <div class="section">
+    <div class="section-title">Rules Reference</div>
+    ${ruleEntries.map(r => `<div class="rule-entry"><span class="rule-name">${esc(r.name)}</span> <span class="rule-desc">${esc(r.desc)}</span></div>`).join('')}
+  </div>` : ''}
+</div>`;
+}
+
+function renderWeapon(equipRow, profilesByEquipId) {
+  const name = equipRow.equipment.equipment_name;
+  const profiles = profilesByEquipId[equipRow.equipment_id] || [];
+
+  if (!profiles.length) {
+    return `<div class="weapon-block"><div class="weapon-name">${esc(name)}</div></div>`;
+  }
+
+  // Single profile with same name as weapon — skip redundant name row
+  const showProfileName = profiles.length > 1 || (profiles[0]?.profile_name && profiles[0].profile_name !== name);
+
+  return `<div class="weapon-block">
+    <div class="weapon-name">${esc(name)}</div>
+    <table class="profile-table">
+      <tr>
+        ${showProfileName ? '<th></th>' : ''}
+        <th>Rng S</th><th>Rng L</th><th>Acc S</th><th>Acc L</th>
+        <th>Str</th><th>AP</th><th>D</th><th>Am</th><th class="traits-cell">Traits</th>
+      </tr>
+      ${profiles.map(p => `<tr>
+        ${showProfileName ? `<td class="profile-name-cell">${esc(p.profile_name || '')}</td>` : ''}
+        <td>${p.range_short||'-'}</td><td>${p.range_long||'-'}</td>
+        <td>${p.acc_short||'-'}</td><td>${p.acc_long||'-'}</td>
+        <td>${p.strength||'-'}</td><td>${p.ap||'-'}</td>
+        <td>${p.damage||'-'}</td><td>${p.ammo||'-'}</td>
+        <td class="traits-cell">${esc(p.traits||'')}</td>
+      </tr>`).join('')}
+    </table>
+  </div>`;
+}
+
+function esc(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
