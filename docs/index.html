@@ -313,6 +313,29 @@
   .rule-entry .rule-name { font-size: 10px; font-weight: 700; color: var(--accent); }
   .rule-entry .rule-desc { font-size: 10px; color: #bbb; }
 
+  #sheet-path-section-bottom { margin-top: 0.75rem; }
+  #sheet-rules-reference { margin-top: 0.75rem; }
+  @media print { #sheet-rules-reference:not(:empty) { break-before: page; margin-top: 0; } }
+  .rules-reference-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.6rem 0.75rem;
+  }
+  .rules-reference-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.5rem;
+  }
+  .rules-reference-grid {
+    columns: 2;
+    column-gap: 1.5rem;
+  }
+  @media (max-width: 600px) { .rules-reference-grid { columns: 1; } }
+
   /* Path of Faith block */
   .path-section {
     background: #1e1810;
@@ -328,6 +351,26 @@
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 0.35rem;
   }
+  .faith-core-rules {
+    border: 1px solid #3a3010;
+    border-radius: 4px;
+    background: #161208;
+    padding: 0.4rem 0.6rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .faith-rule-row { display: flex; gap: 0.5rem; font-size: 10px; line-height: 1.4; }
+  .faith-rule-label {
+    color: var(--accent);
+    font-weight: 700;
+    white-space: nowrap;
+    min-width: 6.5em;
+  }
+  .faith-rule-text { color: #bbb; }
+  .faith-rule-text strong { color: #e8e8e8; }
+
   .article-entry { font-size: 10px; line-height: 1.4; }
   .article-entry .art-threshold { color: var(--accent); font-weight: 700; margin-right: 3px; }
   .article-entry .art-name { color: #ddd; font-style: italic; }
@@ -398,12 +441,16 @@
     <div class="sheet-controls">
       <button class="back-btn" onclick="showGangPicker()" style="margin:0">← Back</button>
       <button class="back-btn" onclick="window.print()" style="margin:0">Print</button>
+      <button class="back-btn" id="faith-toggle-btn" onclick="toggleFaithPlacement()" style="margin:0;display:none">Rules: top</button>
+      <button class="back-btn" id="rules-mode-btn" onclick="toggleRulesMode()" style="margin:0">Rules: inline</button>
     </div>
   </div>
-  <div id="sheet-path-section"></div>
+  <div id="sheet-path-section-top"></div>
   <div class="fighters-grid" id="fighters-grid">
     <div class="loading">Loading…</div>
   </div>
+  <div id="sheet-path-section-bottom"></div>
+  <div id="sheet-rules-reference"></div>
 </div>
 
 <script>
@@ -577,30 +624,109 @@ async function loadSheet(gangId) {
       if (row.skills?.name) skillsByFighter[row.fighter_id].push(row.skills.name);
     }
 
-    // Sort fighters
     const sorted = [...fighters].sort((a, b) => {
       const ao = CLASS_ORDER[a.fighter_class] ?? 99;
       const bo = CLASS_ORDER[b.fighter_class] ?? 99;
       return ao !== bo ? ao - bo : b.credits - a.credits;
     });
 
-    grid.innerHTML = sorted.map(f =>
-      renderFighter(f, equipByFighter[f.id] || [], profilesByEquipId, skillsByFighter[f.id] || [])
-    ).join('');
+    lastSheetData = { sorted, equipByFighter, profilesByEquipId, skillsByFighter };
+    renderSheet();
 
-  } catch(e) {
-    grid.innerHTML = `<div class="loading" style="color:#e07070">Error: ${esc(e.message)}</div>`;
-    console.error(e);
+  } catch(err) {
+    grid.innerHTML = `<div class="loading" style="color:#e07070">Error: ${esc(err.message)}</div>`;
+    console.error(err);
   }
 }
 
+function renderSheet() {
+  if (!lastSheetData) return;
+  const { sorted, equipByFighter, profilesByEquipId, skillsByFighter } = lastSheetData;
+  const grid = document.getElementById('fighters-grid');
+  const refEl = document.getElementById('sheet-rules-reference');
+  const inline = rulesMode === 'inline';
+
+  grid.innerHTML = sorted.map(f =>
+    renderFighter(f, equipByFighter[f.id] || [], profilesByEquipId, skillsByFighter[f.id] || [], inline)
+  ).join('');
+
+  if (!inline) {
+    const allNames = new Map();
+    for (const f of sorted) {
+      for (const [name, desc] of collectRuleEntries(f, equipByFighter[f.id] || [], profilesByEquipId, skillsByFighter[f.id] || [])) {
+        if (!allNames.has(name)) allNames.set(name, desc);
+      }
+    }
+    const entries = [...allNames.entries()].sort(([a], [b]) => a.localeCompare(b));
+    refEl.innerHTML = entries.length ? `
+      <div class="rules-reference-section">
+        <div class="rules-reference-title">Rules Reference</div>
+        <div class="rules-reference-grid">
+          ${entries.map(([name, desc]) => `
+            <div class="rule-entry">
+              <span class="rule-name">${esc(name)}</span>
+              <span class="rule-desc">${esc(desc)}</span>
+            </div>`).join('')}
+        </div>
+      </div>` : '';
+  } else {
+    refEl.innerHTML = '';
+  }
+}
+
+let rulesMode = localStorage.getItem('rulesMode') || 'inline';
+let lastSheetData = null;
+
+function toggleRulesMode() {
+  rulesMode = rulesMode === 'inline' ? 'reference' : 'inline';
+  localStorage.setItem('rulesMode', rulesMode);
+  document.getElementById('rules-mode-btn').textContent = rulesMode === 'inline' ? 'Rules: inline' : 'Rules: reference';
+  renderSheet();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('rules-mode-btn').textContent = rulesMode === 'inline' ? 'Rules: inline' : 'Rules: reference';
+});
+
+let faithPlacement = localStorage.getItem('faithPlacement') || 'top';
+let lastOriginName = null;
+
+function toggleFaithPlacement() {
+  faithPlacement = faithPlacement === 'top' ? 'bottom' : 'top';
+  localStorage.setItem('faithPlacement', faithPlacement);
+  renderPathSection(lastOriginName);
+}
+
 function renderPathSection(originName) {
-  const el = document.getElementById('sheet-path-section');
+  lastOriginName = originName;
+  const topEl = document.getElementById('sheet-path-section-top');
+  const botEl = document.getElementById('sheet-path-section-bottom');
+  const toggleBtn = document.getElementById('faith-toggle-btn');
   const path = originName && CAWDOR_PATHS.paths[originName];
-  if (!path) { el.innerHTML = ''; return; }
-  el.innerHTML = `
+  if (!path) {
+    topEl.innerHTML = '';
+    botEl.innerHTML = '';
+    if (toggleBtn) toggleBtn.style.display = 'none';
+    return;
+  }
+  if (toggleBtn) {
+    toggleBtn.style.display = '';
+    toggleBtn.textContent = faithPlacement === 'top' ? 'Rules: top' : 'Rules: bottom';
+  }
+  const html = `
     <div class="path-section">
-      <h3>${esc(originName)}</h3>
+      <h3>Articles of Faith</h3>
+      <div class="faith-core-rules">
+        <div class="faith-rule-row">
+          <span class="faith-rule-label">Generate (End phase)</span>
+          <span class="faith-rule-text">Roll 1D6 per active (non-Seriously Injured, non-Broken) Cawdor fighter on the field. Each <strong>5+</strong> adds a die to the Faith pool. Beseech the God-Emperor (Double action): roll <strong>3D6</strong> for that fighter instead. Excess dice over active fighter count are discarded.</span>
+        </div>
+        <div class="faith-rule-row">
+          <span class="faith-rule-label">Invoke</span>
+          <span class="faith-rule-text">At the <strong>start of activation</strong>, before actions. Choose any number of Faith dice, remove them from the pool, and roll. If total <strong>≥ threshold</strong> → success. If lower → failure (see article).</span>
+        </div>
+      </div>
+      <h3 style="margin-top:0.5rem">${esc(originName)}</h3>
       <div class="path-desc">${esc(path.description)}</div>
       <div class="articles-grid">
         ${path.articles.map(a => `
@@ -611,9 +737,36 @@ function renderPathSection(originName) {
           </div>`).join('')}
       </div>
     </div>`;
+  if (faithPlacement === 'top') {
+    topEl.innerHTML = html;
+    botEl.innerHTML = '';
+  } else {
+    topEl.innerHTML = '';
+    botEl.innerHTML = html;
+  }
 }
 
-function renderFighter(f, equipRows, profilesByEquipId, skills) {
+function collectRuleEntries(f, equipRows, profilesByEquipId, skills) {
+  const weapons = equipRows.filter(e => e.equipment?.equipment_type === 'weapon');
+  const wargear = equipRows.filter(e => e.equipment?.equipment_type === 'wargear');
+  const ruleNames = new Set();
+  for (const sr of (f.special_rules || [])) ruleNames.add(sr);
+  for (const s of skills) ruleNames.add(s);
+  for (const w of weapons) {
+    for (const p of (profilesByEquipId[w.equipment_id] || [])) {
+      if (p.traits) p.traits.split(',').map(t => t.trim()).forEach(t => ruleNames.add(t));
+    }
+  }
+  for (const g of wargear) ruleNames.add(g.equipment.equipment_name);
+  const entries = new Map();
+  for (const name of ruleNames) {
+    const desc = getRuleDesc(name);
+    if (desc) entries.set(name, desc);
+  }
+  return entries;
+}
+
+function renderFighter(f, equipRows, profilesByEquipId, skills, showRulesInline = true) {
   const cls = f.fighter_class || 'Ganger';
   const stats = [
     ['M', f.movement + '"'],
@@ -632,24 +785,12 @@ function renderFighter(f, equipRows, profilesByEquipId, skills) {
 
   const weapons = equipRows.filter(e => e.equipment?.equipment_type === 'weapon');
   const wargear = equipRows.filter(e => e.equipment?.equipment_type === 'wargear');
-  const specialRules = (f.special_rules || []);
 
-  // Collect all rule names from special rules, skills, weapon traits, wargear
-  const ruleNames = new Set();
-  for (const sr of specialRules) ruleNames.add(sr);
-  for (const s of skills) ruleNames.add(s);
-  for (const w of weapons) {
-    const profiles = profilesByEquipId[w.equipment_id] || [];
-    for (const p of profiles) {
-      if (p.traits) p.traits.split(',').map(t => t.trim()).forEach(t => ruleNames.add(t));
-    }
-  }
-  for (const g of wargear) ruleNames.add(g.equipment.equipment_name);
-  // Build resolved rule entries (name + description), deduped, only those with a description
-  const ruleEntries = [...ruleNames]
-    .map(n => ({ name: n, desc: getRuleDesc(n) }))
-    .filter(r => r.desc)
-    .sort((a, b) => a.name.localeCompare(b.name));
+  const ruleEntries = showRulesInline
+    ? [...collectRuleEntries(f, equipRows, profilesByEquipId, skills).entries()]
+        .map(([name, desc]) => ({ name, desc }))
+        .sort((a, b) => a.name.localeCompare(b.name))
+    : [];
 
   const statusParts = [];
   if (f.xp) statusParts.push(`XP: <span class="val">${f.xp}</span>`);
