@@ -313,6 +313,26 @@
   .rule-entry .rule-name { font-size: 10px; font-weight: 700; color: var(--accent); }
   .rule-entry .rule-desc { font-size: 10px; color: #bbb; }
 
+  /* Path of Faith block */
+  .path-section {
+    background: #1e1810;
+    border: 1px solid #5a4a20;
+    border-radius: 6px;
+    padding: 0.6rem 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  .path-section h3 { font-size: 12px; color: var(--accent); margin-bottom: 0.2rem; }
+  .path-desc { font-size: 11px; color: #bbb; margin-bottom: 0.5rem; }
+  .articles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0.35rem;
+  }
+  .article-entry { font-size: 10px; line-height: 1.4; }
+  .article-entry .art-threshold { color: var(--accent); font-weight: 700; margin-right: 3px; }
+  .article-entry .art-name { color: #ddd; font-style: italic; }
+  .article-entry .art-desc { color: #999; }
+
   /* Loading spinner */
   .loading {
     text-align: center;
@@ -380,6 +400,7 @@
       <button class="back-btn" onclick="window.print()" style="margin:0">Print</button>
     </div>
   </div>
+  <div id="sheet-path-section"></div>
   <div class="fighters-grid" id="fighters-grid">
     <div class="loading">Loading…</div>
   </div>
@@ -393,13 +414,13 @@ const RULES = {"Catfall":"When falling or jumping down, count the vertical dista
 
 function normaliseRuleName(name) {
   const patterns = [
-    [/^(Group Activation)\s*\(\d+\)$/i, ' (X)'],
-    [/^(Rapid Fire)\s*\(\d+\)$/i, ' (X)'],
-    [/^(Gang Fighter)\s*\(\w+\)$/i, ' (X)'],
-    [/^(Promotion)\s*\(.+\)$/i, ' (X)'],
-    [/^Blast\s*\(.+\)$/i, 'Blast (3"/5"/*)'  ],
-    [/^(Devout Masses)\s*\(.+\)$/i, ' (X)'],
-    [/^(Tools of the Trade)\s*\(.+\)$/i, ''],
+    [/^(Group Activation)\s*\(\d+\)$/i, '$1 (X)'],
+    [/^(Rapid Fire)\s*\(\d+\)$/i, '$1 (X)'],
+    [/^(Gang Fighter)\s*\(\w+\)$/i, '$1 (X)'],
+    [/^(Promotion)\s*\(.+\)$/i, '$1 (X)'],
+    [/^Blast\s*\(.+\)$/i, 'Blast (3"/5"/*)'],
+    [/^(Devout Masses)\s*\(.+\)$/i, '$1 (X)'],
+    [/^(Tools of the Trade)\s*\(.+\)$/i, '$1'],
   ];
   for (const [pat, repl] of patterns) {
     if (pat.test(name)) return name.replace(pat, repl);
@@ -411,6 +432,8 @@ function getRuleDesc(name) {
   const norm = normaliseRuleName(name);
   return RULES[norm] || RULES[name] || null;
 }
+
+const CAWDOR_PATHS = {"paths":{"Path of the Faithful":{"description":"The dominant path within House Cawdor. Additional D6 rolled for each Leader or Champion on the battlefield during Faith dice generation.","articles":[{"name":"\"And Contempt shall be My Armour!\"","threshold":"4+","description":"Grants immunity to psychic powers within 6\" radius; failure reduces Willpower by 1."},{"name":"\"And Lo His Gaze did Illuminate them!\"","threshold":"3+","description":"Attack through smoke, ignore darkness, add 1 to Initiative vs Flash weapons."},{"name":"\"And the Word fell upon them, and they were Broken by it!\"","threshold":"5+","description":"Forces Nerve tests on enemies within 9\"; failure affects invoker instead."},{"name":"\"And by Their Works shall They be known!\"","threshold":"5+","description":"Enemy Psyker within 12\" makes Leadership check; failure triggers Perils of the Warp."},{"name":"\"And the Heart of the Heretic was easily cowed!\"","threshold":"8+","description":"Enemy loses Ready marker; failure ends invoker's activation."},{"name":"\"And those of Warped and Twisted Limb shall be Despised!\"","threshold":"7+","description":"Allies within 6\" re-roll failed hits against Brutes and fighters with mutations."}]},"Path of the Fanatic":{"description":"The frenzy of faith the Redemption is known for. Additional D6 rolled for each fighter Engaged with enemies during Faith dice generation.","articles":[{"name":"\"And Lo, I did spread my Wings and the God-Emperor carried me aloft!\"","threshold":"5+","description":"Add 3D6\" to leap distances; reduce jump-down distance by D6+2\"."},{"name":"\"And by our Pain shall He Judge our worth!\"","threshold":"5+","description":"Improve Toughness by 3; suffer Flesh Wound (applied later if threshold passed)."},{"name":"\"And without thought He Smote Them Down!\"","threshold":"6+","description":"Free Charge action; -2 modifier to hits for the round (or battle if failed)."},{"name":"\"And His Feet carried him into the fray!\"","threshold":"2+","description":"Free Move action; suffer an immediate Flesh Wound regardless."},{"name":"\"And He stood Defiant upon the mountain!\"","threshold":"5+","description":"Prevent being Prone/Pinned by ranged attacks; cannot take cover."},{"name":"\"And He Gave Unto Them the Emperor's Mercy!\"","threshold":"5+","description":"Interrupt enemy's Coup De Grace to perform a free Fight action."}]},"Path of the Doomed":{"description":"Celebrates the death of all things. Faith dice generated on 4+ instead of 5+ when the Leader is Seriously Injured/Out of Action or the gang fails a Bottle test.","articles":[{"name":"\"And the people Rose Up in their multitudes to aid Him!\"","threshold":"8+","description":"Add D3 fighters to the battlefield; failure results in one gang fighter taken Captive."},{"name":"\"And by the manner of his Death did the Emperor judge him!\"","threshold":"5+","description":"Move, create Large Blast (5\") centred on fighter dealing Str 3 hits; invoker goes Out of Action."},{"name":"\"And in the Grace of the Emperor even Death was Defied!\"","threshold":"8+","description":"Ignore Seriously Injured effects; can't go Out of Action until end of next activation."},{"name":"\"And in His Light were they struck blind!\"","threshold":"5+","description":"Fighters within 6\" can only target/be targeted by ranged attacks within 3\"."},{"name":"\"And a river of blood did Drown Them!\"","threshold":"11+","description":"Enemy counts Out of Action gang members as friendly for Bottle tests."},{"name":"\"And upon a Fortress of Bone shall my Strength be built!\"","threshold":"6+","description":"Increase Strength and Toughness by number of Out of Action Gangers (max +3); failure reduces both by 1."}]},"Path of the Redeemer":{"description":"Purify the souls of the faithless. Additional D6 rolled for each enemy fighter Seriously Injured or taken Out of Action this round.","articles":[{"name":"\"And each Blow shall be a Barb unto my enemy's flesh!\"","threshold":"5+","description":"Enemy melee attackers must pass Willpower check or suffer a Flesh Wound."},{"name":"\"And Flame shall Burn Away their sin!\"","threshold":"3+","description":"Melee/Versatile weapons gain Blaze trait; failure applies Blaze condition to invoker."},{"name":"\"And with Iron Teeth shall they be Devoured!\"","threshold":"5+","description":"Re-roll failed Wound rolls with chain weapons."},{"name":"\"And Agony brought the unbelievers Low!\"","threshold":"7+","description":"Wounded enemies within 6\" limited to single action; failure limits invoker to single action."},{"name":"\"And in His Gaze were they Found Wanting!\"","threshold":"9+","description":"Judge enemy within 9\"; failed Willpower check prevents actions next activation."},{"name":"\"And Death could not stay His Righteous Wrath!\"","threshold":"7+","description":"If invoker goes Out of Action, one nearby enemy suffers Str 5 AP-1 D2 hit."}]},"Path of the Prophet":{"description":"Utter devotion to the word of the Prophet and the Great Pilgrimage. Roll additional D6s equal to your crew's numerical advantage during Faith dice generation.","articles":[{"name":"\"Look not upon the Face of the Prophet, lest he Blind you with his Glory!\"","threshold":"5+","description":"Fighters within 12\" turn their vision arcs away from the invoker."},{"name":"\"By his Word shall you be Redeemed and in his Name shall you Serve!\"","threshold":"8+","description":"Engaged enemy that fails Willpower check becomes Insane."},{"name":"\"Look to the Light of the Prophet!\"","threshold":"3+","description":"Visibility rules are unaffected for all fighters within 12\"."},{"name":"\"Look not to the counsel of False Masters!\"","threshold":"7+","description":"Enemy fighters within 12\" cannot benefit from Group Activations or Gang Hierarchy."},{"name":"\"Let those who Fear, Fear Not, and those who Fear Not, Know Fear!\"","threshold":"6+","description":"Broken fighters within 12\" Rally; all others must make Nerve tests."},{"name":"\"Empty are the Hands of the Faithless!\"","threshold":"4+","description":"Enemy fighters count as Unarmed in close combat against the invoker."}]}}};
 
 let accessToken = null;
 let userId = null;
@@ -494,7 +517,7 @@ async function loadSheet(gangId) {
   grid.innerHTML = '<div class="loading">Loading…</div>';
   try {
     const [gangs, fighters, allEquipment] = await Promise.all([
-      api(`gangs?id=eq.${gangId}&select=id,name,gang_type,credits,rating,reputation,alignment`),
+      api(`gangs?id=eq.${gangId}&select=id,name,gang_type,credits,rating,reputation,alignment,gang_origins(origin_name)`),
       api(`fighters?gang_id=eq.${gangId}&select=id,fighter_name,fighter_type,fighter_class,movement,weapon_skill,ballistic_skill,strength,toughness,wounds,initiative,attacks,leadership,cool,willpower,intelligence,credits,xp,kills,special_rules,killed,recovery&order=credits.desc`),
       api(`fighter_equipment?gang_id=eq.${gangId}&gang_stash=eq.false&select=id,fighter_id,equipment_id,equipment(equipment_name,equipment_type,equipment_category,cost)`),
     ]);
@@ -511,7 +534,9 @@ async function loadSheet(gangId) {
 
     const gang = gangs[0];
     document.getElementById('sheet-gang-name').textContent = gang.name;
-    document.getElementById('sheet-gang-type').textContent = `${gang.gang_type} · ${gang.alignment || ''}`;
+    const originName = gang.gang_origins?.origin_name;
+    document.getElementById('sheet-gang-type').textContent = [gang.gang_type, gang.alignment, originName].filter(Boolean).join(' · ');
+    renderPathSection(originName);
     document.getElementById('sheet-gang-stats').innerHTML = [
       ['Rating', gang.rating],
       ['Credits', gang.credits],
@@ -567,6 +592,25 @@ async function loadSheet(gangId) {
     grid.innerHTML = `<div class="loading" style="color:#e07070">Error: ${esc(e.message)}</div>`;
     console.error(e);
   }
+}
+
+function renderPathSection(originName) {
+  const el = document.getElementById('sheet-path-section');
+  const path = originName && CAWDOR_PATHS.paths[originName];
+  if (!path) { el.innerHTML = ''; return; }
+  el.innerHTML = `
+    <div class="path-section">
+      <h3>${esc(originName)}</h3>
+      <div class="path-desc">${esc(path.description)}</div>
+      <div class="articles-grid">
+        ${path.articles.map(a => `
+          <div class="article-entry">
+            <span class="art-threshold">${esc(a.threshold)}</span>
+            <span class="art-name">${esc(a.name)}</span>
+            <span class="art-desc"> — ${esc(a.description)}</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
 }
 
 function renderFighter(f, equipRows, profilesByEquipId, skills) {
