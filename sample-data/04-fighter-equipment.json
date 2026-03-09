@@ -1,0 +1,321 @@
+[
+  {
+    "id": "027641c8-e3fa-4ec3-bbf9-e531fa4056da",
+    "fighter_id": "29f3a1bd-40eb-4430-a12c-3d934df99804",
+    "equipment_id": "860a1bb3-a71a-4322-8504-b522aebe2056",
+    "equipment": {
+      "cost": 40,
+      "equipment_name": "Cawdor polearm with blunderbuss*",
+      "equipment_type": "weapon",
+      "equipment_category": "Basic Weapons"
+    }
+  },
+  {
+    "id": "e83ef07f-6e62-4185-a937-c2e586b4e133",
+    "fighter_id": "eb6f282e-1838-4919-a805-867d9e1ab901",
+    "equipment_id": "fd1521d9-1d8e-405a-8867-92696c6d6f23",
+    "equipment": {
+      "cost": 30,
+      "equipment_name": "Chainaxe",
+      "equipment_type": "weapon",
+      "equipment_category": "Close Combat Weapons"
+    }
+  },
+  {
+    "id": "55b23319-73b3-4ea7-a885-5bd3fe827055",
+    "fighter_id": "a04babd7-8408-436d-bd90-71d62773a96d",
+    "equipment_id": "4d8abf85-8beb-4757-823c-326f2b0fe57c",
+    "equipment": {
+      "cost": 30,
+      "equipment_name": "Shotgun",
+      "equipment_type": "weapon",
+      "equipment_category": "Basic Weapons"
+    }
+  },
+  {
+    "id": "7f903a00-5973-4830-9999-684ed46b298e",
+    "fighter_id": "3870df64-56c1-48d2-a276-d6cf80ab7930",
+    "equipment_id": "e8c52bc0-8642-48d9-b482-bc5a810e9aff",
+    "equipment": {
+      "cost": 10,
+      "equipment_name": "Flak armour",
+      "equipment_type": "wargear",
+      "equipment_category": "Armour"
+    }
+  },
+  {
+    "id": "6eef9117-1005-4e18-813e-d765f52ae480",
+    "fighter_id": "f87f8cf0-96fd-4e6f-b4c2-3376a5fc2089",
+    "equipment_id": "e8c52bc0-8642-48d9-b482-bc5a810e9aff",
+    "equipment": {
+      "cost": 10,
+      "equipment_name": "Flak armour",
+      "equipment_type": "wargear",
+      "equipment_category": "Armour"
+    }
+  },
+  {
+    "id": "65dd2d06-043e-40e3-b593-2d4cbde55b3a",
+    "fighter_id": "29f3a1bd-40eb-4430-a12c-3d934df99804",
+    "equipment_id": "e8c52bc0-8642-48d9-b482-bc5a810e9aff",
+    "equipment": {
+      "cost": 10,
+      "equipment_name": "Flak armour",
+      "equipment_type": "wargear",
+      "equipment_category": "Armour"
+    }
+  },
+  {
+    "id": "1a49b1d8-a03b-4deb-80bb-7c539c6e8b48",
+    "fighter_id": "3870df64-56c1-48d2-a276-d6cf80ab7930",
+    "equipment_id": "860a1bb3-a71a-4322-8504-b522aebe2056",
+    "equipment": {
+      "cost": 40,
+      "equipment_name": "Cawdor polearm with blunderbuss*",
+      "equipment_type": "weapon",
+      "equipment_category": "Basic Weapons"
+    }
+  },
+  {
+    "id": "cb1f9cf4-2451-4491-83e3-1e6b19960081",
+    "fighter_id": "5119fbb2-3a23-420b-bac5-47fdf3789635",
+    "equipment_id": "6338e9b3-5d6f-4548-8ca7-ae9ca29b1681",
+    "equipment": {
+      "cost": 5,
+      "equipment_name": "Stub gun",
+      "equipment_type": "weapon",
+      "equipment_category": "Pistols"
+    }
+  },
+  {
+    "id": "f7e7ffdf-6746-4cd2-944f-3ea80f1ccedc",
+    "fighter_id": "5119fbb2-3a23-420b-bac5-47fdf3789635",
+    "equipment_id": "0ba8687d-614a-4c4e-93a3-8849b5e6f0ad",
+    "equipment": {
+      "cost": 15,
+      "equipment_name": "Heavy club",
+      "equipment_type": "weapon",
+      "equipment_category": "Close Combat Weapons"
+    }
+  },
+  {
+    "id": "075aca35-bc34-4f6d-a2ec-c40e1baf6b22",
+    "fighter_id": "eb6f282e-1838-4919-a805-867d9e1ab901",
+    "equipment_id": "6b2932b9-dc34-447d-85e1-a248794e0b0b",
+    "equipment": {
+      "cost": 15,
+      "equipment_name": "Exterminator (Chainaxe)",
+      "equipment_type": "weapon",
+      "equipment_category": "Auxiliary Weapons"
+    }
+  },
+  {
+    "id": "e28dcdc5-43f0-4429-80b0-4dc6d5cfe486",
+    "fighter_id": "eb6f282e-1838-4919-a805-867d9e1ab901",
+    "equipment_id": "6338e9b3-5d6f-4548-8ca7-ae9ca29b1681",
+    "equipment": {
+      "cost": 5,
+      "equipment_name": "Stub gun",
+      "equipment_type": "weapon",
+      "equipment_category": "Pistols"
+    }
+  },
+  {
+    "id": "58690ee8-9a6c-4e81-8141-df5800553d4f",
+    "fighter_id": "eb6f282e-1838-4919-a805-867d9e1ab901",
+    "equipment_id": "5b84c2ea-1ce9-4031-b202-650281583230",
+    "equipment": {
+      "cost": 15,
+      "equipment_name": "Smoke grenades",
+      "equipment_type": "weapon",
+      "equipment_category": "Grenades"
+    }
+  },
+  {
+    "id": "6abdb164-ef05-46da-a17f-c59a1be77318",
+    "fighter_id": "eb6f282e-1838-4919-a805-867d9e1ab901",
+    "equipment_id": "49ba2507-a60f-40e9-8125-8dde2373400f",
+    "equipment": {
+      "cost": 15,
+      "equipment_name": "Mesh armour",
+      "equipment_type": "wargear",
+      "equipment_category": "Armour"
+    }
+  },
+  {
+    "id": "56a3ff8d-d933-4b5f-933a-449ce168cb3f",
+    "fighter_id": "a04babd7-8408-436d-bd90-71d62773a96d",
+    "equipment_id": "02a9f905-1d5d-427d-ab3e-c5e94211c6d1",
+    "equipment": {
+      "cost": 15,
+      "equipment_name": "Exterminator (Shotgun)",
+      "equipment_type": "weapon",
+      "equipment_category": "Auxiliary Weapons"
+    }
+  },
+  {
+    "id": "50346948-af1b-40d4-af0f-ed08cc7d8f62",
+    "fighter_id": "a15da415-a96c-45a9-8b67-7fe3e08e5dbb",
+    "equipment_id": "860a1bb3-a71a-4322-8504-b522aebe2056",
+    "equipment": {
+      "cost": 40,
+      "equipment_name": "Cawdor polearm with blunderbuss*",
+      "equipment_type": "weapon",
+      "equipment_category": "Basic Weapons"
+    }
+  },
+  {
+    "id": "cde9d341-4ccf-4665-b6eb-6ae23f5c3003",
+    "fighter_id": "120b40d8-310a-41c9-9ade-af16db8bafb5",
+    "equipment_id": "3a29f654-3a6e-4dd5-a1a7-67eb2ecb264b",
+    "equipment": {
+      "cost": 125,
+      "equipment_name": "Cawdor heavy crossbow*",
+      "equipment_type": "weapon",
+      "equipment_category": "Heavy Weapons"
+    }
+  },
+  {
+    "id": "b0f3a9ab-8480-4805-afee-3aee85b17366",
+    "fighter_id": "120b40d8-310a-41c9-9ade-af16db8bafb5",
+    "equipment_id": "e8c52bc0-8642-48d9-b482-bc5a810e9aff",
+    "equipment": {
+      "cost": 10,
+      "equipment_name": "Flak armour",
+      "equipment_type": "wargear",
+      "equipment_category": "Armour"
+    }
+  },
+  {
+    "id": "9af42e5f-6102-4672-ae7f-5729b3759554",
+    "fighter_id": "a04babd7-8408-436d-bd90-71d62773a96d",
+    "equipment_id": "49ba2507-a60f-40e9-8125-8dde2373400f",
+    "equipment": {
+      "cost": 15,
+      "equipment_name": "Mesh armour",
+      "equipment_type": "wargear",
+      "equipment_category": "Armour"
+    }
+  },
+  {
+    "id": "fbf051b4-c94b-42a8-8a59-64fc9b4bdd47",
+    "fighter_id": "a15da415-a96c-45a9-8b67-7fe3e08e5dbb",
+    "equipment_id": "e8c52bc0-8642-48d9-b482-bc5a810e9aff",
+    "equipment": {
+      "cost": 10,
+      "equipment_name": "Flak armour",
+      "equipment_type": "wargear",
+      "equipment_category": "Armour"
+    }
+  },
+  {
+    "id": "3bf91a14-4180-4ca9-ba4d-8da9fbaa1c25",
+    "fighter_id": "f87f8cf0-96fd-4e6f-b4c2-3376a5fc2089",
+    "equipment_id": "ea673839-5abd-4e75-bac1-0b1b38206327",
+    "equipment": {
+      "cost": 90,
+      "equipment_name": "Eviscerator*",
+      "equipment_type": "weapon",
+      "equipment_category": "Close Combat Weapons"
+    }
+  },
+  {
+    "id": "f064c59b-f166-42f9-8092-3853db36f31b",
+    "fighter_id": "a15da415-a96c-45a9-8b67-7fe3e08e5dbb",
+    "equipment_id": "0c9aca8c-8905-4971-a788-ba40a4de718a",
+    "equipment": {
+      "cost": 30,
+      "equipment_name": "Bomb delivery rats",
+      "equipment_type": "wargear",
+      "equipment_category": "Personal Equipment"
+    }
+  },
+  {
+    "id": "f6bd9c2a-5a2f-4492-a4b1-4b31686ae267",
+    "fighter_id": "3870df64-56c1-48d2-a276-d6cf80ab7930",
+    "equipment_id": "0c9aca8c-8905-4971-a788-ba40a4de718a",
+    "equipment": {
+      "cost": 30,
+      "equipment_name": "Bomb delivery rats",
+      "equipment_type": "wargear",
+      "equipment_category": "Personal Equipment"
+    }
+  },
+  {
+    "id": "3e1c2e2d-f5c8-4369-a29a-eb39f2ae8234",
+    "fighter_id": "5119fbb2-3a23-420b-bac5-47fdf3789635",
+    "equipment_id": "f8dd6e90-a385-48d0-bf6b-b12a3945c955",
+    "equipment": {
+      "cost": 5,
+      "equipment_name": "Dumdum rounds (Stub gun)",
+      "equipment_type": "weapon",
+      "equipment_category": "Ammunition"
+    }
+  },
+  {
+    "id": "9baabde6-ced6-40cd-96e8-e4390a0afa26",
+    "fighter_id": "29f3a1bd-40eb-4430-a12c-3d934df99804",
+    "equipment_id": "0c9aca8c-8905-4971-a788-ba40a4de718a",
+    "equipment": {
+      "cost": 30,
+      "equipment_name": "Bomb delivery rats",
+      "equipment_type": "wargear",
+      "equipment_category": "Personal Equipment"
+    }
+  },
+  {
+    "id": "eabcf431-edf1-4c59-afbd-002135badfd3",
+    "fighter_id": "29f3a1bd-40eb-4430-a12c-3d934df99804",
+    "equipment_id": "c2f26f69-f70a-4db4-9eb0-32891e54e2f7",
+    "equipment": {
+      "cost": 40,
+      "equipment_name": "Incendiary charges",
+      "equipment_type": "weapon",
+      "equipment_category": "Grenades"
+    }
+  },
+  {
+    "id": "43b40471-2f14-47bc-9b94-9e17c69b9434",
+    "fighter_id": "5119fbb2-3a23-420b-bac5-47fdf3789635",
+    "equipment_id": "6338e9b3-5d6f-4548-8ca7-ae9ca29b1681",
+    "equipment": {
+      "cost": 5,
+      "equipment_name": "Stub gun",
+      "equipment_type": "weapon",
+      "equipment_category": "Pistols"
+    }
+  },
+  {
+    "id": "9959706a-0de1-463e-bf02-5144e5ae9fe7",
+    "fighter_id": "3870df64-56c1-48d2-a276-d6cf80ab7930",
+    "equipment_id": "c2f26f69-f70a-4db4-9eb0-32891e54e2f7",
+    "equipment": {
+      "cost": 40,
+      "equipment_name": "Incendiary charges",
+      "equipment_type": "weapon",
+      "equipment_category": "Grenades"
+    }
+  },
+  {
+    "id": "2d1eef6f-77b4-4f05-b8c4-e17c5bd0851d",
+    "fighter_id": "a15da415-a96c-45a9-8b67-7fe3e08e5dbb",
+    "equipment_id": "c2f26f69-f70a-4db4-9eb0-32891e54e2f7",
+    "equipment": {
+      "cost": 40,
+      "equipment_name": "Incendiary charges",
+      "equipment_type": "weapon",
+      "equipment_category": "Grenades"
+    }
+  },
+  {
+    "id": "7d0d29ae-f415-41ae-852d-ef457d67248d",
+    "fighter_id": "5119fbb2-3a23-420b-bac5-47fdf3789635",
+    "equipment_id": "e8c52bc0-8642-48d9-b482-bc5a810e9aff",
+    "equipment": {
+      "cost": 10,
+      "equipment_name": "Flak armour",
+      "equipment_type": "wargear",
+      "equipment_category": "Armour"
+    }
+  }
+]
