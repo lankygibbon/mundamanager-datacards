@@ -1,0 +1,37 @@
+[
+  {
+    "id": "e2b57c3e-ff6b-4414-8900-66381bb417a1",
+    "fighter_name": "Forge Tyrant",
+    "fighter_type": "Forge Tyrant",
+    "fighter_class": "Leader",
+    "movement": 4,
+    "weapon_skill": 3,
+    "ballistic_skill": 3,
+    "strength": 4,
+    "toughness": 4,
+    "wounds": 2,
+    "initiative": 3,
+    "attacks": 3,
+    "leadership": 5,
+    "cool": 4,
+    "willpower": 8,
+    "intelligence": 7,
+    "credits": 135,
+    "xp": 0,
+    "kills": 0,
+    "special_rules": [
+      "Gang Leader",
+      "Gang Hierarchy (Leader)",
+      "Tools of the Trade",
+      "Group Activation (2)"
+    ],
+    "killed": false,
+    "recovery": false,
+    "active_loadout_id": "2ab6c031-309f-46cd-a443-e18d5dcd2733",
+    "current_loadout": null,
+    "label": null,
+    "note": null,
+    "fighter_sub_type": null,
+    "image_url": null
+  }
+]

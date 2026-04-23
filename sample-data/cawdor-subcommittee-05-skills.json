@@ -1,0 +1,20 @@
+[
+  {
+    "fighter_id": "2e1392ea-7a5f-4789-bf1d-8a36da3a654f",
+    "skills": {
+      "name": "Step Aside"
+    }
+  },
+  {
+    "fighter_id": "523659ef-f4de-4dd4-b842-6fec6a273cf7",
+    "skills": {
+      "name": "Unshakable Conviction"
+    }
+  },
+  {
+    "fighter_id": "9c7cac44-bde1-4485-ba4e-40b8ef41fc7f",
+    "skills": {
+      "name": "Scavenger's Eye"
+    }
+  }
+]

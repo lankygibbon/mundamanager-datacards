@@ -28,7 +28,7 @@
       <span v-if="fighter.xp">XP: <span class="text-text font-medium">{{ fighter.xp }}</span></span>
       <span v-if="fighter.kills">Kills: <span class="text-text font-medium">{{ fighter.kills }}</span></span>
       <span v-if="fighter.recovery" class="text-[#c8a030] font-bold tracking-wide">RECOVERY</span>
-      <span class="ml-auto">Cost: <span class="text-text font-medium">{{ fighter.credits }}cr</span></span>
+      <span class="ml-auto">Base: <span class="text-text font-medium">{{ fighter.credits }}cr</span> · Total: <span class="text-text font-medium">{{ totalCost }}cr</span></span>
     </div>
 
     <!-- Weapons -->
@@ -150,6 +150,11 @@ const weapons = computed(() =>
 const wargear = computed(() =>
   (props.fighter.equipment || []).filter(e => e.equipment?.equipment_type === 'wargear')
 )
+
+const totalCost = computed(() => {
+  const equipCost = (props.fighter.equipment || []).reduce((sum, e) => sum + (e.equipment?.cost || 0), 0)
+  return (props.fighter.credits || 0) + equipCost
+})
 
 
 function splitTraits(traits) {

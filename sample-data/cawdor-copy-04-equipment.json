@@ -1,0 +1,226 @@
+[
+  {
+    "id": "2a591e28-fdd5-4f83-a389-5908b1560c93",
+    "fighter_id": "d9691991-e5a0-4f53-883d-9a4c5dafcdb4",
+    "equipment_id": "49ba2507-a60f-40e9-8125-8dde2373400f",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 15,
+      "equipment_name": "Mesh armour",
+      "equipment_type": "wargear",
+      "equipment_category": "Armour"
+    }
+  },
+  {
+    "id": "898949e2-4ac3-40bd-8ce3-ddd506c6b942",
+    "fighter_id": "7a96c9aa-cbb0-4575-a5ff-2bdde5d559db",
+    "equipment_id": "860a1bb3-a71a-4322-8504-b522aebe2056",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 40,
+      "equipment_name": "Cawdor polearm with blunderbuss*",
+      "equipment_type": "weapon",
+      "equipment_category": "Basic Weapons"
+    }
+  },
+  {
+    "id": "3c9cfb0d-543f-4551-b674-5a32919c4dd8",
+    "fighter_id": "a269db60-00c9-466e-8897-71fff16f835e",
+    "equipment_id": "860a1bb3-a71a-4322-8504-b522aebe2056",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 40,
+      "equipment_name": "Cawdor polearm with blunderbuss*",
+      "equipment_type": "weapon",
+      "equipment_category": "Basic Weapons"
+    }
+  },
+  {
+    "id": "7e796088-dfa1-43ab-aa74-596fc8868ae3",
+    "fighter_id": "9fb8c13e-92b3-4e5e-b2ba-49c046fca7d4",
+    "equipment_id": "6338e9b3-5d6f-4548-8ca7-ae9ca29b1681",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 5,
+      "equipment_name": "Stub gun",
+      "equipment_type": "weapon",
+      "equipment_category": "Pistols"
+    }
+  },
+  {
+    "id": "caefa9e4-e34a-40eb-b7f2-df5adffffb3d",
+    "fighter_id": "d9691991-e5a0-4f53-883d-9a4c5dafcdb4",
+    "equipment_id": "6338e9b3-5d6f-4548-8ca7-ae9ca29b1681",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 5,
+      "equipment_name": "Stub gun",
+      "equipment_type": "weapon",
+      "equipment_category": "Pistols"
+    }
+  },
+  {
+    "id": "c11cfa47-ad59-499d-824e-ef5d6f8fac8d",
+    "fighter_id": "d9691991-e5a0-4f53-883d-9a4c5dafcdb4",
+    "equipment_id": "fd1521d9-1d8e-405a-8867-92696c6d6f23",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 30,
+      "equipment_name": "Chainaxe",
+      "equipment_type": "weapon",
+      "equipment_category": "Close Combat Weapons"
+    }
+  },
+  {
+    "id": "aada8aac-188a-490b-8f4a-325c64dd8f2e",
+    "fighter_id": "d5c7724d-77f2-4db7-a7ca-c793697407b3",
+    "equipment_id": "ea673839-5abd-4e75-bac1-0b1b38206327",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 90,
+      "equipment_name": "Eviscerator*",
+      "equipment_type": "weapon",
+      "equipment_category": "Close Combat Weapons"
+    }
+  },
+  {
+    "id": "3855aa57-1b11-4d93-aead-bbc3d94a058a",
+    "fighter_id": "9fb8c13e-92b3-4e5e-b2ba-49c046fca7d4",
+    "equipment_id": "0ba8687d-614a-4c4e-93a3-8849b5e6f0ad",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 15,
+      "equipment_name": "Heavy club",
+      "equipment_type": "weapon",
+      "equipment_category": "Close Combat Weapons"
+    }
+  },
+  {
+    "id": "3e812353-5dd8-41e6-995c-dc7e416119dd",
+    "fighter_id": "26a3f759-0814-4226-baf0-3be64eb711d6",
+    "equipment_id": "02a9f905-1d5d-427d-ab3e-c5e94211c6d1",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 15,
+      "equipment_name": "Exterminator (Shotgun)",
+      "equipment_type": "weapon",
+      "equipment_category": "Auxiliary Weapons"
+    }
+  },
+  {
+    "id": "986b3a2a-043c-464e-8038-1dddf59be52f",
+    "fighter_id": "d9691991-e5a0-4f53-883d-9a4c5dafcdb4",
+    "equipment_id": "6b2932b9-dc34-447d-85e1-a248794e0b0b",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 15,
+      "equipment_name": "Exterminator (Chainaxe)",
+      "equipment_type": "weapon",
+      "equipment_category": "Auxiliary Weapons"
+    }
+  },
+  {
+    "id": "f11577f2-6010-44a0-96cd-984f6233de88",
+    "fighter_id": "d5c7724d-77f2-4db7-a7ca-c793697407b3",
+    "equipment_id": "e8c52bc0-8642-48d9-b482-bc5a810e9aff",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 10,
+      "equipment_name": "Flak armour",
+      "equipment_type": "wargear",
+      "equipment_category": "Armour"
+    }
+  },
+  {
+    "id": "02c89653-03e4-496b-b01f-00fc71faf413",
+    "fighter_id": "4c48fc05-6926-401f-9c52-975374e024f1",
+    "equipment_id": "860a1bb3-a71a-4322-8504-b522aebe2056",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 40,
+      "equipment_name": "Cawdor polearm with blunderbuss*",
+      "equipment_type": "weapon",
+      "equipment_category": "Basic Weapons"
+    }
+  },
+  {
+    "id": "d4f47ae0-2059-4d65-a3a1-91c6c34026df",
+    "fighter_id": "d9691991-e5a0-4f53-883d-9a4c5dafcdb4",
+    "equipment_id": "5b84c2ea-1ce9-4031-b202-650281583230",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 15,
+      "equipment_name": "Smoke grenades",
+      "equipment_type": "weapon",
+      "equipment_category": "Grenades"
+    }
+  },
+  {
+    "id": "e49a9dd3-7e54-4891-91d9-b8f554935b82",
+    "fighter_id": "26a3f759-0814-4226-baf0-3be64eb711d6",
+    "equipment_id": "4d8abf85-8beb-4757-823c-326f2b0fe57c",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 30,
+      "equipment_name": "Shotgun",
+      "equipment_type": "weapon",
+      "equipment_category": "Basic Weapons"
+    }
+  },
+  {
+    "id": "c730f72b-6510-4f78-814e-ce64fefa1008",
+    "fighter_id": "26a3f759-0814-4226-baf0-3be64eb711d6",
+    "equipment_id": "49ba2507-a60f-40e9-8125-8dde2373400f",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 15,
+      "equipment_name": "Mesh armour",
+      "equipment_type": "wargear",
+      "equipment_category": "Armour"
+    }
+  },
+  {
+    "id": "1845a63f-ee02-4f51-814f-7a649ccac491",
+    "fighter_id": "10a0c0b7-8dcd-4e3e-b4b2-7423b3eb0bdd",
+    "equipment_id": "860a1bb3-a71a-4322-8504-b522aebe2056",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 40,
+      "equipment_name": "Cawdor polearm with blunderbuss*",
+      "equipment_type": "weapon",
+      "equipment_category": "Basic Weapons"
+    }
+  }
+]

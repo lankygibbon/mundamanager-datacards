@@ -3,9 +3,6 @@
     <!-- Weapon header -->
     <div class="weapon-header">
       <span class="weapon-name">{{ equipment.equipment.equipment_name }}</span>
-      <span v-if="profiles.length" class="weapon-profile-count">
-        {{ profiles.length > 1 ? profiles.length + ' profiles' : profiles[0]?.profile_name && profiles[0].profile_name !== equipment.equipment.equipment_name ? profiles[0].profile_name : '' }}
-      </span>
     </div>
 
     <!-- Profile table -->

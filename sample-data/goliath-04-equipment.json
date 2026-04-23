@@ -1,0 +1,86 @@
+[
+  {
+    "id": "e9473332-4285-4219-8c18-9e2b20e9e19f",
+    "fighter_id": "e2b57c3e-ff6b-4414-8900-66381bb417a1",
+    "equipment_id": "3fcb9546-bc85-4702-bef8-34bff389b845",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 5,
+      "equipment_name": "Hardened Immune System",
+      "equipment_type": "wargear",
+      "equipment_category": "Gene-smithing: Vatborn"
+    }
+  },
+  {
+    "id": "a6ed5efe-b772-4d81-9985-d836a153c083",
+    "fighter_id": "e2b57c3e-ff6b-4414-8900-66381bb417a1",
+    "equipment_id": "28493b83-b5a9-4a95-bfaf-e045816a2161",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 70,
+      "equipment_name": "Combat shotgun",
+      "equipment_type": "weapon",
+      "equipment_category": "Basic Weapons"
+    }
+  },
+  {
+    "id": "648ca931-535d-46d4-9f30-5c7024172cc5",
+    "fighter_id": "e2b57c3e-ff6b-4414-8900-66381bb417a1",
+    "equipment_id": "76601803-8fe1-45b6-8a88-1b158f9b545e",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 65,
+      "equipment_name": "Grenade launcher",
+      "equipment_type": "weapon",
+      "equipment_category": "Special Weapons"
+    }
+  },
+  {
+    "id": "7cf5c06d-3056-4339-ae52-909066253526",
+    "fighter_id": "e2b57c3e-ff6b-4414-8900-66381bb417a1",
+    "equipment_id": "71def3e8-a364-40dc-8af9-620d16271663",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 195,
+      "equipment_name": "Heavy flamer*",
+      "equipment_type": "weapon",
+      "equipment_category": "Heavy Weapons"
+    }
+  },
+  {
+    "id": "38dc35b8-f038-49a6-8cc5-c608c3cc6fe1",
+    "fighter_id": "e2b57c3e-ff6b-4414-8900-66381bb417a1",
+    "equipment_id": "fd1521d9-1d8e-405a-8867-92696c6d6f23",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 30,
+      "equipment_name": "Chainaxe",
+      "equipment_type": "weapon",
+      "equipment_category": "Close Combat Weapons"
+    }
+  },
+  {
+    "id": "220793d9-8f93-42ad-bce0-db6c9b8cec07",
+    "fighter_id": "e2b57c3e-ff6b-4414-8900-66381bb417a1",
+    "equipment_id": "67e1ec80-6c03-4318-a7e6-4184f9063239",
+    "loadout_id": null,
+    "gang_stash": false,
+    "is_master_crafted": false,
+    "equipment": {
+      "cost": 15,
+      "equipment_name": "Fighting knife",
+      "equipment_type": "weapon",
+      "equipment_category": "Close Combat Weapons"
+    }
+  }
+]

@@ -1,0 +1,19 @@
+[
+  {
+    "id": "52f0fed0-832b-417f-b35c-1d4340548c29",
+    "created_at": "2026-03-05T17:47:44.058952+00:00",
+    "fighter_id": "e2b57c3e-ff6b-4414-8900-66381bb417a1",
+    "updated_at": "2026-03-05T17:47:44.023+00:00",
+    "skill_id": "c52e8ffd-5a01-4afe-b47c-d2214ff5a631",
+    "is_advance": false,
+    "credits_increase": 0,
+    "xp_cost": 0,
+    "fighter_injury_id": null,
+    "user_id": "7039e030-faed-4d9a-a4ab-6a475d555160",
+    "fighter_effect_skill_id": null,
+    "custom_skill_id": null,
+    "skills": {
+      "name": "Bull Charge"
+    }
+  }
+]

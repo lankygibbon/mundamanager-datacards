@@ -20,6 +20,9 @@
         <button class="ctrl-btn active" @click="toggleRulesMode">
           Rules: {{ rulesMode }}
         </button>
+        <button class="ctrl-btn active" @click="toggleSortCost">
+          Cost: {{ sortCost }}
+        </button>
       </div>
     </div>
 
@@ -30,7 +33,7 @@
       <!-- Fighter cards -->
       <div id="fighters-grid" class="grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(360px, 1fr))">
         <FighterCard
-          v-for="fighter in gangStore.fighters"
+          v-for="fighter in sortedFighters"
           :key="fighter.id"
           :fighter="fighter"
           :show-rules-inline="rulesMode === 'inline'"
@@ -67,6 +70,7 @@ const router = useRouter()
 const gangStore = useGangStore()
 
 const rulesMode = useLocalStorage('rulesMode', 'inline')
+const sortCost = useLocalStorage('sortCost', 'base')
 
 function print() { window.print() }
 
@@ -86,6 +90,27 @@ function scrollToRule(name) {
 function toggleRulesMode() {
   rulesMode.value = rulesMode.value === 'inline' ? 'reference' : 'inline'
 }
+
+function toggleSortCost() {
+  sortCost.value = sortCost.value === 'base' ? 'total' : 'base'
+}
+
+const CLASS_ORDER = { Leader: 0, Champion: 1, Specialist: 2, Ganger: 3, Crew: 4, Juve: 5 }
+
+function fighterTotalCost(f) {
+  return (f.credits || 0) + (f.equipment || []).reduce((sum, e) => sum + (e.equipment?.cost || 0), 0)
+}
+
+const sortedFighters = computed(() =>
+  [...gangStore.fighters].sort((a, b) => {
+    const ao = CLASS_ORDER[a.fighter_class] ?? 99
+    const bo = CLASS_ORDER[b.fighter_class] ?? 99
+    if (ao !== bo) return ao - bo
+    const ca = sortCost.value === 'total' ? fighterTotalCost(a) : (a.credits || 0)
+    const cb = sortCost.value === 'total' ? fighterTotalCost(b) : (b.credits || 0)
+    return cb - ca
+  })
+)
 
 onMounted(() => gangStore.fetchSheet(route.params.id))
 
@@ -107,7 +132,7 @@ const gangStats = computed(() => {
 
 const consolidatedRules = computed(() => {
   const seen = new Map()
-  for (const fighter of gangStore.fighters) {
+  for (const fighter of sortedFighters.value) {
     for (const name of collectRuleNames(fighter)) {
       if (!seen.has(name)) {
         const desc = getRuleDesc(name)

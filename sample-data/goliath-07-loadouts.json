@@ -1,0 +1,14 @@
+[
+  {
+    "id": "2ab6c031-309f-46cd-a443-e18d5dcd2733",
+    "fighter_id": "e2b57c3e-ff6b-4414-8900-66381bb417a1",
+    "loadout_name": "Loadout 1",
+    "created_at": "2026-03-10T08:53:30.515428+00:00"
+  },
+  {
+    "id": "38a280c4-e50f-40db-9114-b2be13bf5e7c",
+    "fighter_id": "e2b57c3e-ff6b-4414-8900-66381bb417a1",
+    "loadout_name": "Loadout 2",
+    "created_at": "2026-03-10T08:53:40.383335+00:00"
+  }
+]
