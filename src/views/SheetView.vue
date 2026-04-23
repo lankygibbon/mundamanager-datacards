@@ -30,6 +30,22 @@
     <div v-else-if="gangStore.error" class="text-red-400 text-center py-16">{{ gangStore.error }}</div>
 
     <template v-else>
+      <!-- Articles of Faith -->
+      <div v-if="currentPath" class="path-section mb-6">
+        <div class="path-header">
+          <span class="path-name">{{ currentPath.name }}</span>
+          <span class="faith-dice-rule">Faith dice: roll 1D6 per fighter on the battlefield (not Seriously Injured/Broken) at the start of each round — each <strong>5+</strong> generates a Faith die</span>
+        </div>
+        <div class="path-desc">{{ currentPath.description }}</div>
+        <div class="articles-grid">
+          <div v-for="article in currentPath.articles" :key="article.name" class="article-entry">
+            <span class="art-threshold">{{ article.threshold }}</span>
+            <span class="art-name">{{ article.name }}</span>
+            <span class="art-desc"> — {{ article.description }}</span>
+          </div>
+        </div>
+      </div>
+
       <!-- Fighter cards -->
       <div id="fighters-grid" class="grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(360px, 1fr))">
         <FighterCard
@@ -64,6 +80,7 @@ import { useLocalStorage } from '@vueuse/core'
 import { useGangStore } from '@/stores/gang'
 import { getRuleDesc } from '@/lib/rules'
 import FighterCard from '@/components/FighterCard.vue'
+import CAWDOR_PATHS from '@/lib/cawdor-paths.json'
 
 const route = useRoute()
 const router = useRouter()
@@ -130,6 +147,11 @@ const gangStats = computed(() => {
   ]
 })
 
+const currentPath = computed(() => {
+  const originName = gangStore.currentGang?.gang_origins?.origin_name
+  return originName ? { name: originName, ...CAWDOR_PATHS.paths[originName] } : null
+})
+
 const consolidatedRules = computed(() => {
   const seen = new Map()
   for (const fighter of sortedFighters.value) {
@@ -178,6 +200,59 @@ function collectRuleNames(fighter) {
 
 .rule-entry { transition: background-color 0.2s ease; }
 .rule-highlighted { background-color: #3a2e10 !important; }
+
+.path-section {
+  background: #1e1810;
+  border: 1px solid #5a4a20;
+  border-radius: 6px;
+  padding: 0.6rem 0.75rem;
+}
+.path-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+  flex-wrap: wrap;
+}
+.path-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-accent);
+  white-space: nowrap;
+}
+.faith-dice-rule {
+  font-size: 11px;
+  color: #999;
+}
+.faith-dice-rule strong {
+  color: var(--color-accent);
+}
+.path-desc {
+  font-size: 12px;
+  color: #bbb;
+  margin-bottom: 0.5rem;
+}
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.3rem;
+}
+.article-entry {
+  font-size: 11px;
+  line-height: 1.4;
+}
+.art-threshold {
+  color: var(--color-accent);
+  font-weight: 700;
+  margin-right: 3px;
+}
+.art-name {
+  color: #ddd;
+  font-style: italic;
+}
+.art-desc {
+  color: #999;
+}
 
 @media print {
   #fighters-grid {
