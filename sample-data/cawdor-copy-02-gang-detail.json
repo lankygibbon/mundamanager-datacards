@@ -1,0 +1,14 @@
+[
+  {
+    "id": "38f26cef-22b2-458e-98db-6f7f3321b001",
+    "name": "The Subcommittee for Pious Acts copy",
+    "gang_type": "House Cawdor",
+    "credits": 130,
+    "rating": 870,
+    "reputation": 1,
+    "alignment": "Law Abiding",
+    "gang_origins": {
+      "origin_name": "Path of the Doomed"
+    }
+  }
+]

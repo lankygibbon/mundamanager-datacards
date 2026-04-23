@@ -1,0 +1,14 @@
+[
+  {
+    "id": "18197ae0-fe18-4a19-aef5-6f7bc4fb1bdb",
+    "name": "Cawdor Skirmish",
+    "gang_type": "House Cawdor",
+    "credits": 0,
+    "rating": 1250,
+    "reputation": 1,
+    "alignment": "Law Abiding",
+    "gang_origins": {
+      "origin_name": "Path of the Faithful"
+    }
+  }
+]

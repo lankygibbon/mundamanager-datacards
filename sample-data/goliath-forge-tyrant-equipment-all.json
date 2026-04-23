@@ -1,0 +1,77 @@
+[
+  {
+    "equipment_id": "3fcb9546-bc85-4702-bef8-34bff389b845",
+    "fighter_id": "e2b57c3e-ff6b-4414-8900-66381bb417a1",
+    "id": "e9473332-4285-4219-8c18-9e2b20e9e19f",
+    "purchase_cost": 5,
+    "created_at": "2026-03-05T17:47:26.482187+00:00",
+    "updated_at": null,
+    "original_cost": 5,
+    "vehicle_id": null,
+    "user_id": "7039e030-faed-4d9a-a4ab-6a475d555160",
+    "is_master_crafted": false,
+    "fighter_effect_equipment_id": null,
+    "custom_equipment_id": null,
+    "gang_stash": false,
+    "gang_id": "4cc08bb0-c0ef-4574-a994-816432dec615",
+    "loadout_id": null,
+    "is_editable": false,
+    "granted_by_equipment_id": null,
+    "equipment": {
+      "cost": 5,
+      "equipment_name": "Hardened Immune System",
+      "equipment_type": "wargear",
+      "equipment_category": "Gene-smithing: Vatborn"
+    }
+  },
+  {
+    "equipment_id": "28493b83-b5a9-4a95-bfaf-e045816a2161",
+    "fighter_id": "e2b57c3e-ff6b-4414-8900-66381bb417a1",
+    "id": "a6ed5efe-b772-4d81-9985-d836a153c083",
+    "purchase_cost": 60,
+    "created_at": "2026-03-10T08:54:18.563172+00:00",
+    "updated_at": null,
+    "original_cost": 70,
+    "vehicle_id": null,
+    "user_id": "7039e030-faed-4d9a-a4ab-6a475d555160",
+    "is_master_crafted": false,
+    "fighter_effect_equipment_id": null,
+    "custom_equipment_id": null,
+    "gang_stash": false,
+    "gang_id": "4cc08bb0-c0ef-4574-a994-816432dec615",
+    "loadout_id": null,
+    "is_editable": false,
+    "granted_by_equipment_id": null,
+    "equipment": {
+      "cost": 70,
+      "equipment_name": "Combat shotgun",
+      "equipment_type": "weapon",
+      "equipment_category": "Basic Weapons"
+    }
+  },
+  {
+    "equipment_id": "76601803-8fe1-45b6-8a88-1b158f9b545e",
+    "fighter_id": "e2b57c3e-ff6b-4414-8900-66381bb417a1",
+    "id": "648ca931-535d-46d4-9f30-5c7024172cc5",
+    "purchase_cost": 55,
+    "created_at": "2026-03-10T08:54:38.087865+00:00",
+    "updated_at": null,
+    "original_cost": 65,
+    "vehicle_id": null,
+    "user_id": "7039e030-faed-4d9a-a4ab-6a475d555160",
+    "is_master_crafted": false,
+    "fighter_effect_equipment_id": null,
+    "custom_equipment_id": null,
+    "gang_stash": false,
+    "gang_id": "4cc08bb0-c0ef-4574-a994-816432dec615",
+    "loadout_id": null,
+    "is_editable": false,
+    "granted_by_equipment_id": null,
+    "equipment": {
+      "cost": 65,
+      "equipment_name": "Grenade launcher",
+      "equipment_type": "weapon",
+      "equipment_category": "Special Weapons"
+    }
+  }
+]

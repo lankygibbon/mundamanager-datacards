@@ -1,0 +1,29 @@
+[
+  {
+    "id": "4cc08bb0-c0ef-4574-a994-816432dec615",
+    "name": "Goliath Gang",
+    "gang_type": "House Goliath",
+    "rating": 255,
+    "credits": 745,
+    "reputation": 1,
+    "alignment": "Law Abiding"
+  },
+  {
+    "id": "dffb9f90-0bb4-495e-bc14-b6f6a2f75b64",
+    "name": "The Subcommittee for Pious Acts",
+    "gang_type": "House Cawdor",
+    "rating": 1000,
+    "credits": 0,
+    "reputation": 1,
+    "alignment": "Law Abiding"
+  },
+  {
+    "id": "38f26cef-22b2-458e-98db-6f7f3321b001",
+    "name": "The Subcommittee for Pious Acts copy",
+    "gang_type": "House Cawdor",
+    "rating": 870,
+    "credits": 130,
+    "reputation": 1,
+    "alignment": "Law Abiding"
+  }
+]

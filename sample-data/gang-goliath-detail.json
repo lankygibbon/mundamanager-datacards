@@ -1,0 +1,37 @@
+[
+  {
+    "created_at": "2026-03-05T17:46:10.272164+00:00",
+    "user_id": "7039e030-faed-4d9a-a4ab-6a475d555160",
+    "name": "Goliath Gang",
+    "gang_type": "House Goliath",
+    "credits": 745,
+    "last_updated": "2026-03-05T17:46:44.459+00:00",
+    "reputation": 1,
+    "meat": 0,
+    "exploration_points": 0,
+    "rating": 255,
+    "id": "4cc08bb0-c0ef-4574-a994-816432dec615",
+    "gang_type_id": "b32767ac-37cb-423e-875c-6e176f7b1766",
+    "alignment": "Law Abiding",
+    "positioning": {
+      "0": "temp-1772732803592-m4fjt7gli",
+      "1": "e2b57c3e-ff6b-4414-8900-66381bb417a1"
+    },
+    "note": null,
+    "alliance_id": null,
+    "gang_variants": null,
+    "gang_colour": null,
+    "scavenging_rolls": 0,
+    "image_url": null,
+    "note_backstory": null,
+    "gang_affiliation_id": null,
+    "gang_origin_id": null,
+    "wealth": 1000,
+    "power": null,
+    "sustenance": null,
+    "salvage": null,
+    "hidden": false,
+    "default_gang_image": 1,
+    "gang_origins": null
+  }
+]
